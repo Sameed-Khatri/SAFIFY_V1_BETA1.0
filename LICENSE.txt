@@ -1,0 +1,22 @@
+# Copyright Notice and License Restrictions
+
+Copyright (c) 2024 Sameed-Khatri
+All Rights Reserved.
+
+**Notice**: No part of this software or its documentation may be reproduced, distributed, modified, or used in any form or by any means without the explicit prior written permission from the copyright owner.
+
+## Restrictions
+
+- **No Use**: The software and associated documentation files (the "Software") may not be used in any way, including but not limited to using, copying, modifying, merging, publishing, distributing, sublicensing, or selling copies of the Software.
+- **No Modification**: Modifications to the Software are not allowed unless expressly authorized in writing by the copyright owner.
+- **No Distribution**: The Software may not be redistributed under any circumstances without prior written permission.
+
+## Permissions
+
+- Any use, reproduction, modification, or distribution of the Software not in accordance with the terms listed under "Restrictions" is strictly prohibited and may be subject to legal action.
+
+## Contact
+
+- For permissions, write to: smdkhatri1@gmail.com
+
+This notice should be included in all copies or substantial portions of the Software.
