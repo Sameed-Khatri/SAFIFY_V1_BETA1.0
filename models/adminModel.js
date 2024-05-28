@@ -69,10 +69,38 @@ const DeleteUserReport = async (user_report_id) => {
 const DeleteActionReport = async (action_report_id) => {
     try {
         const query = `CALL DeleteActionReport(?)`;
-        const [results] = await db.query(query,[action_report_id]);
-        return results[0];
+        const results = await db.query(query,[action_report_id]);
+        const affectedRows = results[0][0][0].affectedRows;
+        return affectedRows;
     } catch (error) {
         console.error('Error deleting action report: ', error);
+        throw error;
+    }
+};
+
+const getUseridFromActionReportid = async (action_report_id) => {
+    try {
+        const query = `SELECT getUseridFromActionReportid(?) AS userID`;
+        const userID = await db.query(query,[action_report_id]);
+        //console.log(userID);
+        return userID;
+    } catch (error) {
+        console.error('Error model fetching userid from action reportid: ', error);
+        throw error;
+    }
+};
+
+const updateActionTeamPushNotification = async (action_report_id,userID) => {
+    try {
+        const query = `CALL updateActionTeamPushNotification(?, ?)`;
+        const result = await db.query(query,[action_report_id,userID]);
+        console.log(result);
+        console.log(result[0]);
+        const affectedRows = result[0][0][0].affectedRows;
+        console.log('affectedRows update: ',affectedRows);
+        return affectedRows;
+    } catch (error) {
+        console.error('Error model update ActionTeam Push Notification: ', error);
         throw error;
     }
 };
@@ -96,5 +124,7 @@ module.exports = {
     InsertAssignTask,
     DeleteUserReport,
     DeleteActionReport,
-    ApproveActionReport
+    ApproveActionReport,
+    getUseridFromActionReportid,
+    updateActionTeamPushNotification
 };

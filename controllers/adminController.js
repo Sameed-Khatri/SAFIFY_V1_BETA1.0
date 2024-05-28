@@ -72,9 +72,26 @@ const DeleteUserReport = async (req, res) => {
 const DeleteActionReport = async (req, res) => {
     try {
         const action_report_id = req.params.action_report_id;
+        console.log('action_report_id: ', action_report_id);
+        const userIDArray = await adminService.getUseridFromActionReportid(action_report_id);
+        const userID = userIDArray[0][0].userID;
+        if(!userID) {
+            return res.status(404).json({ status: 'User ID Not Found' });
+        };
+        console.log('result user id:',userID);
         const result = await adminService.DeleteActionReport(action_report_id);
+        if(result != 1) {
+            return res.status(404).json({ status: 'No action report found with the given ID' });
+        };
+        console.log('result delete:',result);
+        const pushNotification = await adminService.updateActionTeamPushNotification(action_report_id, userID);
+        if(pushNotification != 1) {
+            return res.status(404).json({ status: 'No Push Notification Updated' });
+        };
+        console.log('result push notification:',pushNotification);
         return res.status(200).json({status: 'deleted action report'});
     } catch (error) {
+        console.log(error);
         return res.status(500).json({status: 'Internal Server Error'});
     }
 };
@@ -99,4 +116,4 @@ module.exports = {
     DeleteUserReport,
     DeleteActionReport,
     ApproveActionReport
-}
+};

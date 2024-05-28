@@ -17,7 +17,6 @@ const insertActionReport = async (reportDetails) => {
     try {
         console.log('MODEL');
         console.log(reportDetails);
-        //const { reported_by, surrounding_image, report_description, question_one, question_two, question_three, question_four, question_five, resolution_description, proof_image, user_report_id, action_team_id } = reportDetails;
         const query = `CALL InsertActionReport(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         const results = await db.query(query,reportDetails);
         console.log(results);
@@ -42,8 +41,21 @@ const fetchAssignedTasks = async (action_team_id,status) => {
     }
 };
 
+const fetchPushNotificationData = async (user_id) => {
+    try {
+        const query = `CALL fetchPushNotificationData(?)`;
+        const data = await db.query(query,[user_id]);
+        const data2 = data[0];
+        return data2[0];
+    } catch (error) {
+        console.error('Error model fetching push notification data: ', error);
+        throw error;
+    }
+};
+
 module.exports = {
     getActionTeamIdFromUserId,
     insertActionReport,
-    fetchAssignedTasks
+    fetchAssignedTasks,
+    fetchPushNotificationData
 };

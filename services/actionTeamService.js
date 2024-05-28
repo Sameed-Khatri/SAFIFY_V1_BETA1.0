@@ -78,11 +78,21 @@ const FetchAssignedTasks = async (action_team_id) => {
         console.error('Error service fetching assigned tasks: ', error);
         throw error;
     }
-}
+};
+
+const fetchPushNotificationData = async (user_id) => {
+    try {
+        return await actionTeamModel.fetchPushNotificationData(user_id);
+    } catch (error) {
+        console.error('Error service fetching push notification data: ', error);
+        throw error;
+    }
+};
 
 module.exports = {
     MakeActionReport,
-    FetchAssignedTasks
-}
+    FetchAssignedTasks,
+    fetchPushNotificationData
+};
 
 

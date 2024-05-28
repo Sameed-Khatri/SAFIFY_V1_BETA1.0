@@ -66,6 +66,24 @@ const DeleteActionReport = async (action_report_id) => {
     }
 };
 
+const getUseridFromActionReportid = async (action_report_id) => {
+    try {
+        return await adminModel.getUseridFromActionReportid(action_report_id);
+    } catch (error) {
+        console.error('Error service fetching userid from action reportid: ', error);
+        throw error;
+    }
+};
+
+const updateActionTeamPushNotification = async (action_report_id,userID) => {
+    try {
+        return await adminModel.updateActionTeamPushNotification(action_report_id,userID);
+    } catch (error) {
+        console.error('Error service update ActionTeam Push Notification: ', error);
+        throw error;
+    }
+};
+
 const ApproveActionReport = async (user_report_id,action_report_id) => {
     try {
         return await adminModel.ApproveActionReport(user_report_id,action_report_id);
@@ -83,5 +101,7 @@ module.exports = {
     InsertAssignTask,
     DeleteUserReport,
     DeleteActionReport,
-    ApproveActionReport
-}
+    ApproveActionReport,
+    getUseridFromActionReportid,
+    updateActionTeamPushNotification
+};
