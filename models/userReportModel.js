@@ -71,11 +71,24 @@ const fetchIncidentSubTypes = async (incident_type_id) => {
     }
 };
 
+const fetchPushNotificationData = async (user_id) => {
+    try {
+        const query = `CALL fetchPushNotificationData(?)`;
+        const data = await db.query(query,[user_id]);
+        const data2 = data[0];
+        return data2[0];
+    } catch (error) {
+        console.error('Error model fetching push notification data: ', error);
+        throw error;
+    }
+};
+
 module.exports = {
     insertUserReport,
     fetchUserReports,
     fetchSubLocations,
     fetchLocations,
     fetchIncidentTypes,
-    fetchIncidentSubTypes
+    fetchIncidentSubTypes,
+    fetchPushNotificationData
 };

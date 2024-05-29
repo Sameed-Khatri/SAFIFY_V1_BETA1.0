@@ -73,11 +73,21 @@ const fetchIncidentSubTypes = async (incident_type_id) => {
     }
 };
 
+const fetchPushNotificationData = async (user_id) => {
+    try {
+        return await userReportModel.fetchPushNotificationData(user_id);
+    } catch (error) {
+        console.error('Error service fetching push notification data: ', error);
+        throw error;
+    }
+};
+
 module.exports = {
     makeUserReport,
     fetchUserReports,
     fetchSubLocations,
     fetchLocations,
     fetchIncidentTypes,
-    fetchIncidentSubTypes
+    fetchIncidentSubTypes,
+    fetchPushNotificationData
 };
