@@ -62,7 +62,29 @@ const InsertAssignTask = async (req, res) => {
 const DeleteUserReport = async (req, res) => {
     try {
         const user_report_id = req.params.user_report_id;
+        console.log('user_report_id', user_report_id);
+        const userIDArray = await adminService.getUseridFromUserReportid(user_report_id);
+        const userID = userIDArray[0][0].userID;
+        if(!userID) {
+            return res.status(404).json({ status: 'User ID Not Found' });
+        };
+        console.log('result user id:',userID);
         const result = await adminService.DeleteUserReport(user_report_id);
+        if(result < 1) {
+            return res.status(404).json({ status: 'No user report found with the given ID' });
+        };
+        if(result > 1) {
+            return res.status(404).json({ status: 'More than 1 user report found with the given ID' });
+        };
+        console.log('result delete:',result);
+        const pushNotification = await adminService.updateUserPushNotification(user_report_id, userID);
+        if(pushNotification < 1) {
+            return res.status(404).json({ status: 'No Push Notification Updated' });
+        };
+        if(pushNotification > 1) {
+            return res.status(404).json({ status: 'More than 1 users with same user ID' });
+        };
+        console.log('result push notification:',pushNotification);
         return res.status(200).json({status: 'deleted user report'});
     } catch (error) {
         return res.status(500).json({status: 'Internal Server Error'});
@@ -80,13 +102,19 @@ const DeleteActionReport = async (req, res) => {
         };
         console.log('result user id:',userID);
         const result = await adminService.DeleteActionReport(action_report_id);
-        if(result != 1) {
+        if(result < 1) {
             return res.status(404).json({ status: 'No action report found with the given ID' });
+        };
+        if(result > 1) {
+            return res.status(404).json({ status: 'More than 1 action report found with the given ID' });
         };
         console.log('result delete:',result);
         const pushNotification = await adminService.updateActionTeamPushNotification(action_report_id, userID);
-        if(pushNotification != 1) {
+        if(pushNotification < 1) {
             return res.status(404).json({ status: 'No Push Notification Updated' });
+        };
+        if(pushNotification > 1) {
+            return res.status(404).json({ status: 'More than 1 users with same user ID' });
         };
         console.log('result push notification:',pushNotification);
         return res.status(200).json({status: 'deleted action report'});

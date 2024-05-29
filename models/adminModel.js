@@ -58,10 +58,37 @@ const InsertAssignTask = async (user_report_id, user_id, action_team_id, inciden
 const DeleteUserReport = async (user_report_id) => {
     try {
         const query = `CALL DeleteUserReport(?)`;
-        const [results] = await db.query(query,[user_report_id]);
-        return results[0];
+        const results = await db.query(query,[user_report_id]);
+        const affectedRows = results[0][0][0].affectedRows;
+        return affectedRows;
     } catch (error) {
         console.error('Error deleting user report: ', error);
+        throw error;
+    }
+};
+
+const getUseridFromUserReportid = async (user_report_id) => {
+    try {
+        const qurey = `SELECT getUseridFromUserReportid(?) AS userID`;
+        const userID = await db.query(qurey,[user_report_id]);
+        return userID;
+    } catch (error) {
+        console.error('Error model fetching userid from user reportid: ', error);
+        throw error;
+    }
+};
+
+const updateUserPushNotification = async (user_report_id, userID) => {
+    try {
+        const query = `CALL updateUserPushNotification(?, ?)`;
+        const result = await db.query(query,[user_report_id,userID]);
+        console.log(result);
+        console.log(result[0]);
+        const affectedRows = result[0][0][0].affectedRows;
+        console.log('affectedRows update: ',affectedRows);
+        return affectedRows;
+    } catch (error) {
+        console.error('Error model update User Push Notification: ', error);
         throw error;
     }
 };
@@ -126,5 +153,7 @@ module.exports = {
     DeleteActionReport,
     ApproveActionReport,
     getUseridFromActionReportid,
-    updateActionTeamPushNotification
+    updateActionTeamPushNotification,
+    getUseridFromUserReportid,
+    updateUserPushNotification
 };

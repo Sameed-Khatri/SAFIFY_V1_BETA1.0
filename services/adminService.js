@@ -57,6 +57,24 @@ const DeleteUserReport = async (user_report_id) => {
     }
 };
 
+const getUseridFromUserReportid = async (user_report_id) => {
+    try {
+        return await adminModel.getUseridFromUserReportid(user_report_id);
+    } catch (error) {
+        console.error('Error service fetching userid from user reportid: ', error);
+        throw error;
+    }
+};
+
+const updateUserPushNotification = async (user_report_id,userID) => {
+    try {
+        return await adminModel.updateUserPushNotification(user_report_id,userID);
+    } catch (error) {
+        console.error('Error service update User Push Notification: ', error);
+        throw error;
+    }
+};
+
 const DeleteActionReport = async (action_report_id) => {
     try {
         return await adminModel.DeleteActionReport(action_report_id);
@@ -103,5 +121,7 @@ module.exports = {
     DeleteActionReport,
     ApproveActionReport,
     getUseridFromActionReportid,
-    updateActionTeamPushNotification
+    updateActionTeamPushNotification,
+    getUseridFromUserReportid,
+    updateUserPushNotification
 };
