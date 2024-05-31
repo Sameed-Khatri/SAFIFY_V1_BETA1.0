@@ -67,7 +67,7 @@ const fetchEfficiency = async () => {
         console.log(result2);
         const data = result2.map(entry => ({
             action_team_name: entry.action_team_name,
-            efficiency_value: parseFloat(entry.efficiency_value).toFixed(2) + ' %' // Assuming 2 decimal places
+            efficiency_value: parseFloat(entry.efficiency_value).toFixed(2)
         }));
         return data;
     } catch (error) {
