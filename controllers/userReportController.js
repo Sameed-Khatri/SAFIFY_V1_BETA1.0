@@ -1,4 +1,5 @@
 const userReportService = require('../services/userReportService');
+const helper = require('../Helper/generateNotifications');
 
 const makeUserReport = async (req, res) => {
     try {
@@ -10,8 +11,14 @@ const makeUserReport = async (req, res) => {
             incident_criticality_id: req.body.incident_criticality_id,
             user_id: req.params.userid
         };
-        const result = await userReportService.makeUserReport(reportData,req.file);
-        console.log(result);
+        const userReportID = await userReportService.makeUserReport(reportData,req.file);
+        console.log(userReportID);
+        const adminUserID = await userReportService.getAdminUserID();
+        console.log(adminUserID);
+        const messageTitle = 'New Incident Report Submitted';
+        const messageBody = `New incident report (report number: ${userReportID}) has been submitted.`;
+        const response = await helper.sendNotification(adminUserID,messageTitle,messageBody);
+        console.log(response);
         return res.status(200).json({status: 'report submitted'});
     } catch (error) {
         console.log(error);

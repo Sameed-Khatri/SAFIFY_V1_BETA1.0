@@ -20,8 +20,8 @@ const makeUserReport = async (reportData,file) => {
             uploadedUrl,
             reportData.user_id
         ];
-        const insertResult = await userReportModel.insertUserReport(reportDetails);
-        return insertResult;
+        const userReportID = await userReportModel.insertUserReport(reportDetails);
+        return userReportID;
     } catch (error) {
         console.error('Error service inserting user report: ', error);
         throw error;
@@ -82,6 +82,15 @@ const fetchPushNotificationData = async (user_id) => {
     }
 };
 
+const getAdminUserID = async () => {
+    try {
+        return await actionTeamModel.getAdminUserID();
+    } catch (error) {
+        console.error('Error service fetching admin user id: ', error);
+        throw error;
+    }
+};
+
 module.exports = {
     makeUserReport,
     fetchUserReports,
@@ -89,5 +98,6 @@ module.exports = {
     fetchLocations,
     fetchIncidentTypes,
     fetchIncidentSubTypes,
-    fetchPushNotificationData
+    fetchPushNotificationData,
+    getAdminUserID
 };

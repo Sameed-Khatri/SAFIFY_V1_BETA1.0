@@ -111,6 +111,15 @@ const ApproveActionReport = async (user_report_id,action_report_id) => {
     }
 };
 
+const getActionTeamUserIDFromActionTeamID = async (action_team_id) => {
+    try {
+        return await adminModel.getActionTeamUserIDFromActionTeamID(action_team_id);
+    } catch (error) {
+        console.error('Error service get ActionTeam UserID From ActionTeamID: ', error);
+        throw error;
+    }
+};
+
 module.exports = {
     fetchAllUserReports,
     fetchAllActionReports,
@@ -123,5 +132,6 @@ module.exports = {
     getUseridFromActionReportid,
     updateActionTeamPushNotification,
     getUseridFromUserReportid,
-    updateUserPushNotification
+    updateUserPushNotification,
+    getActionTeamUserIDFromActionTeamID
 };

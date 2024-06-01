@@ -4,7 +4,9 @@ const insertUserReport = async (reportDetails) => {
     try {
         const query = `CALL InsertUserReport(?, ?, ?, ?, ?, ?, ?)`;
         const results = await db.query(query,reportDetails);
-        return results[0];
+        console.log(results);
+        console.log(results[0][0][0].user_report_id);
+        return results[0][0][0].user_report_id;
     } catch (error) {
         console.error('Error model inserting user report: ', error);
         throw error;
@@ -83,6 +85,18 @@ const fetchPushNotificationData = async (user_id) => {
     }
 };
 
+const getAdminUserID = async () => {
+    try {
+        const query = `CALL getAdminUserID()`;
+        const result = await db.query(query);
+        const adminUserID = result[0][0][0].user_id;
+        return adminUserID;
+    } catch (error) {
+        console.error('Error model fetching admin user id: ', error);
+        throw error;
+    }
+};
+
 module.exports = {
     insertUserReport,
     fetchUserReports,
@@ -90,5 +104,6 @@ module.exports = {
     fetchLocations,
     fetchIncidentTypes,
     fetchIncidentSubTypes,
-    fetchPushNotificationData
+    fetchPushNotificationData,
+    getAdminUserID
 };

@@ -143,6 +143,19 @@ const ApproveActionReport = async (user_report_id,action_report_id) => {
     }
 };
 
+const getActionTeamUserIDFromActionTeamID = async (action_team_id) => {
+    try {
+        const query = `CALL getActionTeamUserIDFromActionTeamID(?)`;
+        const result = await db.query(query, [action_team_id]);
+        const userID = result[0][0];
+        console.log(userID[0].user_id);
+        return userID[0].user_id;
+    } catch (error) {
+        console.error('Error get ActionTeam UserID From ActionTeamID: ', error);
+        throw error;
+    }
+};
+
 module.exports = {
     fetchAllUserReports,
     fetchAllActionReports,
@@ -155,5 +168,6 @@ module.exports = {
     getUseridFromActionReportid,
     updateActionTeamPushNotification,
     getUseridFromUserReportid,
-    updateUserPushNotification
+    updateUserPushNotification,
+    getActionTeamUserIDFromActionTeamID
 };

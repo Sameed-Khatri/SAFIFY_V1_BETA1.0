@@ -62,8 +62,8 @@ const MakeActionReport = async (reportData,files) => {
             action_team_id
         ];
         console.log(reportDetails);
-        const insertResult = await actionTeamModel.insertActionReport(reportDetails);
-        return insertResult;
+        const actionReportID = await actionTeamModel.insertActionReport(reportDetails);
+        return actionReportID;
     } catch (error) {
         console.error('Error service inserting action report: ', error);
         throw error;
@@ -89,10 +89,20 @@ const fetchPushNotificationData = async (user_id) => {
     }
 };
 
+const getAdminUserID = async () => {
+    try {
+        return await actionTeamModel.getAdminUserID();
+    } catch (error) {
+        console.error('Error service fetching admin user id: ', error);
+        throw error;
+    }
+};
+
 module.exports = {
     MakeActionReport,
     FetchAssignedTasks,
-    fetchPushNotificationData
+    fetchPushNotificationData,
+    getAdminUserID
 };
 
 

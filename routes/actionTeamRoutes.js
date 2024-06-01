@@ -11,7 +11,8 @@ const upload = multer({ storage: multer.memoryStorage() }).fields([
 
 const role = 'action_team';
 
-router.post('/dashboard/:userid/MakeActionReport', upload, authenticate.authenticateToken, authenticate.authorizeRoles(role),actionTeamController.MakeActionReport);
+//router.post('/dashboard/:userid/MakeActionReport', upload, authenticate.authenticateToken, authenticate.authorizeRoles(role),actionTeamController.MakeActionReport);
 router.get('/dashboard/:userid/fetchAssignedTasks', authenticate.authenticateToken, authenticate.authorizeRoles(role), actionTeamController.FetchAssignedTasks);
+router.post('/dashboard/:userid/MakeActionReport', upload, actionTeamController.MakeActionReport);
 
 module.exports = router;

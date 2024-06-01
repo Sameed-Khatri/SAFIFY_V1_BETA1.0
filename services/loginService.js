@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken');
 const loginModel = require('../models/loginModel')
 const passwordSecurity = require('../middlewares/passwordSecurity');
+const storeDeviceToken = require('../Helper/storeDeviceToken')
 
-const checkCredentials = async (user_id,user_pass) => {
+const checkCredentials = async (user_id,user_pass,device_token) => {
     try {
         const user = await loginModel.checkCredentials(user_id,user_pass);
         if(!user) {
@@ -17,6 +18,8 @@ const checkCredentials = async (user_id,user_pass) => {
         if(!ismatch) {
             throw new Error('Wrong Password');
         }
+        const affectedRows = await storeDeviceToken.pushTokenDB(userData.user_id, userData.role_name, device_token);
+        console.log(affectedRows);
         const token = jwt.sign({user_id: userData.user_id, role_name: userData.role_name, user_name: userData.user_name}, process.env.JWT_SECRET, { expiresIn: '24h' });
         console.log('token: '+ token);
         const decode = jwt.verify(token, process.env.JWT_SECRET);

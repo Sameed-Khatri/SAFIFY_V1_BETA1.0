@@ -1,4 +1,5 @@
 const actionTeamService = require('../services/actionTeamService');
+const helper = require('../Helper/generateNotifications');
 
 const MakeActionReport = async (req,res) => {
     try {
@@ -15,9 +16,15 @@ const MakeActionReport = async (req,res) => {
             action_team_id: req.params.userid
         }
         console.log('Received report data:', reportData);
-        const result = await actionTeamService.MakeActionReport(reportData,req.files);
+        const actionReportID = await actionTeamService.MakeActionReport(reportData,req.files);
         console.log('CONTROLLER');
-        console.log(result);
+        console.log(actionReportID);
+        const adminUserID = await actionTeamService.getAdminUserID();
+        console.log(adminUserID);
+        const messageTitle = 'New Action Report Submitted';
+        const messageBody = `New action report (report number: ${actionReportID}) has been submitted.`;
+        const response = await helper.sendNotification(adminUserID,messageTitle,messageBody);
+        console.log(response);
         return res.status(200).json({status: 'report submitted'});
     } catch (error) {
         console.log(error);

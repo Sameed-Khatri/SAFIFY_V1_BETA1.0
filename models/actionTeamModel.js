@@ -20,8 +20,8 @@ const insertActionReport = async (reportDetails) => {
         const query = `CALL InsertActionReport(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         const results = await db.query(query,reportDetails);
         console.log(results);
-        console.log(results[0]);
-        return results[0];
+        console.log(results[0][0][0].action_report_id);
+        return results[0][0][0].action_report_id;
     } catch (error) {
         console.error('Error model inserting action report: ', error);
         throw error;
@@ -53,9 +53,22 @@ const fetchPushNotificationData = async (user_id) => {
     }
 };
 
+const getAdminUserID = async () => {
+    try {
+        const query = `CALL getAdminUserID()`;
+        const result = await db.query(query);
+        const adminUserID = result[0][0][0].user_id;
+        return adminUserID;
+    } catch (error) {
+        console.error('Error model fetching admin user id: ', error);
+        throw error;
+    }
+};
+
 module.exports = {
     getActionTeamIdFromUserId,
     insertActionReport,
     fetchAssignedTasks,
-    fetchPushNotificationData
+    fetchPushNotificationData,
+    getAdminUserID
 };
