@@ -21,6 +21,7 @@ const checkCredentials = async (user_id,user_pass,device_token) => {
         };
 
         const loginsAllowed = await checkLoginsAllowed(user_id);
+        console.log("logins allowed: ", loginsAllowed);
         if(loginsAllowed === 0) {
             throw new Error('This Account is Already Logged in From Another Device');
         };
@@ -32,7 +33,6 @@ const checkCredentials = async (user_id,user_pass,device_token) => {
         console.log('token: '+ token);
         const decode = jwt.verify(token, process.env.JWT_SECRET);
         console.log('token role name: ',decode);
-        
         return token;
     } catch (error) {
         console.error('Error in authentication service: ', error);

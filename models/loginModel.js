@@ -17,7 +17,11 @@ const checkLoginsAllowed = async (user_id) => {
     try {
         const query = `CALL checkLoginsAllowed(?)`;
         const result = await db.query(query, [user_id]);
-        return result[0];
+        // console.log("result:",result);
+        // console.log("result[0]:",result[0]);
+        // console.log("result[0][0]:",result[0][0]);
+        // console.log("result[0][0][0]:",result[0][0][0]);
+        return result[0][0][0].logins_allowed;
     } catch (error) {
         console.error('Error model checking logins allowed: ', error);
         throw error;

@@ -73,18 +73,18 @@ const fetchIncidentSubTypes = async (incident_type_id) => {
     }
 };
 
-const fetchPushNotificationData = async (user_id) => {
-    try {
-        return await userReportModel.fetchPushNotificationData(user_id);
-    } catch (error) {
-        console.error('Error service fetching push notification data: ', error);
-        throw error;
-    }
-};
+// const fetchPushNotificationData = async (user_id) => {
+//     try {
+//         return await userReportModel.fetchPushNotificationData(user_id);
+//     } catch (error) {
+//         console.error('Error service fetching push notification data: ', error);
+//         throw error;
+//     }
+// };
 
 const getAdminUserID = async () => {
     try {
-        return await actionTeamModel.getAdminUserID();
+        return await userReportModel.getAdminUserID();
     } catch (error) {
         console.error('Error service fetching admin user id: ', error);
         throw error;
@@ -98,6 +98,6 @@ module.exports = {
     fetchLocations,
     fetchIncidentTypes,
     fetchIncidentSubTypes,
-    fetchPushNotificationData,
+    //fetchPushNotificationData,
     getAdminUserID
 };

@@ -30,13 +30,13 @@ const fetchUserReports = async (req, res) => {
     try {
         const user_id = req.params.userid;
         const reports = await userReportService.fetchUserReports(user_id);
-        const data = await userReportService.fetchPushNotificationData(user_id);
-        const response = {
-            result: reports,
-            is_report_deleted: data[0].is_report_deleted,
-            deleted_report_id: data[0].deleted_report_id
-        };
-        return res.status(200).json(response);
+        // const data = await userReportService.fetchPushNotificationData(user_id);
+        // const response = {
+        //     result: reports,
+        //     is_report_deleted: data[0].is_report_deleted,
+        //     deleted_report_id: data[0].deleted_report_id
+        // };
+        return res.status(200).json(reports);
     } catch (error) {
         return res.status(500).json({ status: 'Internal server error', error: error.message });
     }

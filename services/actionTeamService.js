@@ -80,14 +80,14 @@ const FetchAssignedTasks = async (action_team_id) => {
     }
 };
 
-const fetchPushNotificationData = async (user_id) => {
-    try {
-        return await actionTeamModel.fetchPushNotificationData(user_id);
-    } catch (error) {
-        console.error('Error service fetching push notification data: ', error);
-        throw error;
-    }
-};
+// const fetchPushNotificationData = async (user_id) => {
+//     try {
+//         return await actionTeamModel.fetchPushNotificationData(user_id);
+//     } catch (error) {
+//         console.error('Error service fetching push notification data: ', error);
+//         throw error;
+//     }
+// };
 
 const getAdminUserID = async () => {
     try {
@@ -101,7 +101,7 @@ const getAdminUserID = async () => {
 module.exports = {
     MakeActionReport,
     FetchAssignedTasks,
-    fetchPushNotificationData,
+    //fetchPushNotificationData,
     getAdminUserID
 };
 

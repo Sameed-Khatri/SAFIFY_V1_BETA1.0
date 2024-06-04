@@ -5,7 +5,7 @@ const fetchDeviceToken = async (user_id) => {
     try {
         const query = `CALL getDeviceTokenDB(?)`;
         const result = await db.query(query, [user_id]);
-        const deviceToken = result[0].token;
+        const deviceToken = result[0][0][0].token;
         if(!deviceToken) {
             throw new Error('No device toke for procided user ID');
         };
@@ -20,7 +20,7 @@ const sendNotification = async (user_id, messageTitle, messageBody) => {
     try {
         const deviceToken = await fetchDeviceToken(user_id);
         if(!deviceToken) {
-            throw new Error('No device toke for procided user ID');
+            throw new Error('No device toke for provided user ID');
         };
 
         const message = {
@@ -49,7 +49,9 @@ const sendNotification = async (user_id, messageTitle, messageBody) => {
                 },
             },
         };
+        console.log('Sending message:', message);
         const response = await firebase.messaging().send(message);
+        console.log('Successfully sent message:', response);
         return response;
     } catch (error) {
         console.error('Error sending notification: ', error);

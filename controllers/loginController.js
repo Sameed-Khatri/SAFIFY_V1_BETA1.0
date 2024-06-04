@@ -7,12 +7,26 @@ const checkCredentials = async (req, res) => {
         const device_token = req.body.device_token;
         console.log(user_id,user_pass, device_token);
         const token = await loginService.checkCredentials(user_id,user_pass,device_token);
+        const result = await loginService.updateLoginsAllowed(user_id,0);
+        console.log(result);
         return res.status(200).json({ status: 'Login successful', token});
     } catch (error) {
         return res.status(500).json({ status: 'Internal server error', error: error.message });
     }
 };
 
+const logout = async (req, res) => {
+    try {
+        const user_id = req.body.user_id;
+        const loginsAllowed = await loginService.updateLoginsAllowed(user_id,1);
+        console.log(loginsAllowed);
+        return res.status(200).json({ status: 'Logout successful'});
+    } catch (error) {
+        return res.status(500).json({ status: 'Internal server error', error: error.message });
+    }
+};
+
 module.exports = {
-    checkCredentials
+    checkCredentials,
+    logout
 };

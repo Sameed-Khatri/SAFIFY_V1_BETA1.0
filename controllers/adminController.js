@@ -57,7 +57,8 @@ const InsertAssignTask = async (req, res) => {
         if (!user_report_id || !user_id || !incident_criticality_id || !action_team_id) {
             return res.status(400).json({ status: 'Bad Request', error: 'params incomplete' });
         }
-        const actionTeamUserID = adminService.getActionTeamUserIDFromActionTeamID(action_team_id);
+        const actionTeamUserID = await adminService.getActionTeamUserIDFromActionTeamID(action_team_id);
+        console.log(actionTeamUserID);
         const result = await adminService.InsertAssignTask(user_report_id, user_id, action_team_id, incident_criticality_id);
         const response1 = await helper.sendNotification(actionTeamUserID,messageTitle1,messageBody1);
         const response2 = await helper.sendNotification(user_id,messageTitle2,messageBody2);

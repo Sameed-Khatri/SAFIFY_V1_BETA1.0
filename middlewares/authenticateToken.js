@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
+const loginService = require('../services/loginService');
 
 // Middleware to validate token
-const authenticateToken = (req, res, next) => {
+const authenticateToken = async (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
 
@@ -14,8 +15,12 @@ const authenticateToken = (req, res, next) => {
         //const decoded2 = json.decode(token);
         req.user = decoded; // Add the decoded user to the request for further use
         console.log("Decoded JWT:", req.user);
+        const user_id = req.user.user_id;
+        console.log("user id: ",user_id)
         next();
     } catch (error) {
+        const result = await loginService.updateLoginsAllowed(user_id,1);
+        console.log(result);
         return res.status(403).json({ message: 'Invalid token.' });
     }
 };
