@@ -2,6 +2,8 @@
 node_modules/
 
 .env
+.gcloudignore
+app.yaml
 
 config/ca.pem
 config/safify-7973d-firebase-adminsdk-rmnq2-f9dd82f582.json

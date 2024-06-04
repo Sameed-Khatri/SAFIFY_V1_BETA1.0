@@ -66,14 +66,14 @@ const getUseridFromUserReportid = async (user_report_id) => {
     }
 };
 
-const updateUserPushNotification = async (user_report_id,userID) => {
-    try {
-        return await adminModel.updateUserPushNotification(user_report_id,userID);
-    } catch (error) {
-        console.error('Error service update User Push Notification: ', error);
-        throw error;
-    }
-};
+// const updateUserPushNotification = async (user_report_id,userID) => {
+//     try {
+//         return await adminModel.updateUserPushNotification(user_report_id,userID);
+//     } catch (error) {
+//         console.error('Error service update User Push Notification: ', error);
+//         throw error;
+//     }
+// };
 
 const DeleteActionReport = async (action_report_id) => {
     try {
@@ -93,14 +93,14 @@ const getUseridFromActionReportid = async (action_report_id) => {
     }
 };
 
-const updateActionTeamPushNotification = async (action_report_id,userID) => {
-    try {
-        return await adminModel.updateActionTeamPushNotification(action_report_id,userID);
-    } catch (error) {
-        console.error('Error service update ActionTeam Push Notification: ', error);
-        throw error;
-    }
-};
+// const updateActionTeamPushNotification = async (action_report_id,userID) => {
+//     try {
+//         return await adminModel.updateActionTeamPushNotification(action_report_id,userID);
+//     } catch (error) {
+//         console.error('Error service update ActionTeam Push Notification: ', error);
+//         throw error;
+//     }
+// };
 
 const ApproveActionReport = async (user_report_id,action_report_id) => {
     try {
@@ -130,8 +130,8 @@ module.exports = {
     DeleteActionReport,
     ApproveActionReport,
     getUseridFromActionReportid,
-    updateActionTeamPushNotification,
+    //updateActionTeamPushNotification,
     getUseridFromUserReportid,
-    updateUserPushNotification,
+    //updateUserPushNotification,
     getActionTeamUserIDFromActionTeamID
 };

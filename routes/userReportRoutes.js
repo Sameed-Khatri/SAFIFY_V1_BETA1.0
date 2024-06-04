@@ -7,7 +7,7 @@ const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage }).single('image');
 
-const role = 'student';
+const role = 'user';
 
 router.post('/dashboard/:userid/MakeReport',upload, authenticate.authenticateToken, authenticate.authorizeRoles(role), userReportController.makeUserReport);
 router.get('/dashboard/:userid/reports', authenticate.authenticateToken, authenticate.authorizeRoles(role), userReportController.fetchUserReports);

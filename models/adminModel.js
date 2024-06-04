@@ -78,20 +78,20 @@ const getUseridFromUserReportid = async (user_report_id) => {
     }
 };
 
-const updateUserPushNotification = async (user_report_id, userID) => {
-    try {
-        const query = `CALL updateUserPushNotification(?, ?)`;
-        const result = await db.query(query,[user_report_id,userID]);
-        console.log(result);
-        console.log(result[0]);
-        const affectedRows = result[0][0][0].affectedRows;
-        console.log('affectedRows update: ',affectedRows);
-        return affectedRows;
-    } catch (error) {
-        console.error('Error model update User Push Notification: ', error);
-        throw error;
-    }
-};
+// const updateUserPushNotification = async (user_report_id, userID) => {
+//     try {
+//         const query = `CALL updateUserPushNotification(?, ?)`;
+//         const result = await db.query(query,[user_report_id,userID]);
+//         console.log(result);
+//         console.log(result[0]);
+//         const affectedRows = result[0][0][0].affectedRows;
+//         console.log('affectedRows update: ',affectedRows);
+//         return affectedRows;
+//     } catch (error) {
+//         console.error('Error model update User Push Notification: ', error);
+//         throw error;
+//     }
+// };
 
 const DeleteActionReport = async (action_report_id) => {
     try {
@@ -117,20 +117,20 @@ const getUseridFromActionReportid = async (action_report_id) => {
     }
 };
 
-const updateActionTeamPushNotification = async (action_report_id,userID) => {
-    try {
-        const query = `CALL updateActionTeamPushNotification(?, ?)`;
-        const result = await db.query(query,[action_report_id,userID]);
-        console.log(result);
-        console.log(result[0]);
-        const affectedRows = result[0][0][0].affectedRows;
-        console.log('affectedRows update: ',affectedRows);
-        return affectedRows;
-    } catch (error) {
-        console.error('Error model update ActionTeam Push Notification: ', error);
-        throw error;
-    }
-};
+// const updateActionTeamPushNotification = async (action_report_id,userID) => {
+//     try {
+//         const query = `CALL updateActionTeamPushNotification(?, ?)`;
+//         const result = await db.query(query,[action_report_id,userID]);
+//         console.log(result);
+//         console.log(result[0]);
+//         const affectedRows = result[0][0][0].affectedRows;
+//         console.log('affectedRows update: ',affectedRows);
+//         return affectedRows;
+//     } catch (error) {
+//         console.error('Error model update ActionTeam Push Notification: ', error);
+//         throw error;
+//     }
+// };
 
 const ApproveActionReport = async (user_report_id,action_report_id) => {
     try {
@@ -166,8 +166,8 @@ module.exports = {
     DeleteActionReport,
     ApproveActionReport,
     getUseridFromActionReportid,
-    updateActionTeamPushNotification,
+    //updateActionTeamPushNotification,
     getUseridFromUserReportid,
-    updateUserPushNotification,
+    //updateUserPushNotification,
     getActionTeamUserIDFromActionTeamID
 };
