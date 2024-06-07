@@ -10,17 +10,20 @@ const authenticateToken = async (req, res, next) => {
         return res.status(401).json({ message: 'Access denied, no token provided.' });
     }
 
+    let decoded;
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        //const decoded2 = json.decode(token);
-        req.user = decoded; // Add the decoded user to the request for further use
+        decoded = jwt.decode(token); // Decode the token without verifying
+        req.user = jwt.verify(token, process.env.JWT_SECRET); // Verify the token
         console.log("Decoded JWT:", req.user);
         const user_id = req.user.user_id;
-        console.log("user id: ",user_id)
+        console.log("user id: ", user_id);
         next();
     } catch (error) {
-        const result = await loginService.updateLoginsAllowed(user_id,1);
-        console.log(result);
+        const user_id = decoded ? decoded.user_id : null; // Extract user_id from the decoded token
+        if (user_id) {
+            const result = await loginService.updateLoginsAllowed(user_id, 1);
+            console.log(result);
+        }
         return res.status(403).json({ message: 'Invalid token.' });
     }
 };
