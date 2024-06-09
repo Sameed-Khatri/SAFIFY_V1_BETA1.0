@@ -60,6 +60,9 @@ const InsertAssignTask = async (req, res) => {
         const actionTeamUserID = await adminService.getActionTeamUserIDFromActionTeamID(action_team_id);
         console.log(actionTeamUserID);
         const result = await adminService.InsertAssignTask(user_report_id, user_id, action_team_id, incident_criticality_id);
+        if (result === 'DUPLICATE ENTRY') {
+            return res.status(409).json({status: 'user report already assigned'});
+        };
         const response1 = await helper.sendNotification(actionTeamUserID,messageTitle1,messageBody1);
         const response2 = await helper.sendNotification(user_id,messageTitle2,messageBody2);
         console.log(response1,response2);

@@ -48,10 +48,16 @@ const InsertAssignTask = async (user_report_id, user_id, action_team_id, inciden
     try {
         const query = `CALL InsertAssignTask(?,?,?,?)`;
         const [results] = await db.query(query,[user_report_id, user_id, action_team_id, incident_criticality_id]);
+        console.log(results[0]);
         return results[0];
     } catch (error) {
-        console.error('Error inserting in assigned task: ', error);
-        throw error;
+        if (error.code === 'ER_DUP_ENTRY') {
+            console.error('Duplicate entry error: ', error);
+            return 'DUPLICATE ENTRY';
+        } else {
+            console.error('Error inserting in assigned task: ', error);
+            throw error;
+        }
     }
 };
 
