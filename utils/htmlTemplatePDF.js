@@ -110,9 +110,11 @@ const generateActionReportHtml = (data, logoBase64, currentDate) => {
             .details { width: 100%; border-collapse: collapse; margin-top: 20px; }
             .details td, .details th { border: 1px solid black; padding: 8px; }
             .details th { text-align: left; background-color: #f2f2f2; }
-            .image-container { width: 100%; display: flex; justify-content: space-between; margin-top: 20px; }
-            .image-container img { width: 45%; height: 200px; object-fit: contain; }
-            h3 { margin-bottom: 0; }
+            .image-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            .image-table td, .image-table th { border: 1px solid black; padding: 8px; text-align: center; }
+            .image-table th { background-color: #f2f2f2; }
+            .image-container img { width: 100%; height: auto; max-width: 250px; max-height: 250px; object-fit: contain; }
+            h3 { margin-bottom: 0; font-size: 14px; }
         </style>
     </head>
     <body>
@@ -125,8 +127,8 @@ const generateActionReportHtml = (data, logoBase64, currentDate) => {
     `;
 
     for (const report of data) {
-        const surroundingImageHtml = report['Surrounding Image'] ? `<img src="${report['Surrounding Image']}" alt="Surrounding Image">` : 'No Image';
-        const proofImageHtml = report['Proof Image'] ? `<img src="${report['Proof Image']}" alt="Proof Image">` : 'No Image';
+        const surroundingImageHtml = report['Surrounding Image'] ? `<img src="${report['Surrounding Image']}" class="image-container" alt="Surrounding Image" style="max-width: 250px; max-height: 250px;">` : 'No Image';
+        const proofImageHtml = report['Proof Image'] ? `<img src="${report['Proof Image']}" class="image-container" alt="Proof Image" style="max-width: 250px; max-height: 250px;">` : 'No Image';
         html += `
         <div class="report-container">
             <table class="header-table">
@@ -192,17 +194,18 @@ const generateActionReportHtml = (data, logoBase64, currentDate) => {
                     <td colspan="3">${report['Incident Report Description']}</td>
                 </tr>
             </table>
-            <div class="image-container">
-                <div>
-                    <h3>Surrounding Image</h3>
-                    ${surroundingImageHtml}
-                </div>
-                <div>
-                    <h3>Proof Image</h3>
-                    ${proofImageHtml}
-                </div>
-            </div>
+            <table class="image-table">
+                <tr>
+                    <th>Surrounding Image</th>
+                    <th>Proof Image</th>
+                </tr>
+                <tr>
+                    <td>${surroundingImageHtml}</td>
+                    <td>${proofImageHtml}</td>
+                </tr>
+            </table>
         </div>
+        ${data.indexOf(report) < data.length - 1 ? '<div class="page-break"></div>' : ''}
         `;
     }
 
@@ -213,6 +216,7 @@ const generateActionReportHtml = (data, logoBase64, currentDate) => {
 
     return html;
 };
+
 
 
 module.exports = {
