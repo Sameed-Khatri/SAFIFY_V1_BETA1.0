@@ -1,5 +1,6 @@
 const adminService = require('../services/adminService');
 const helper = require('../Helper/generateNotifications');
+const middleware = require('../middlewares/passwordSecurity');
 
 const fetchAllUserReports = async (req, res) => {
     try {
@@ -173,6 +174,21 @@ const ApproveActionReport = async (req, res) => {
     }
 };
 
+const createUser = async (req, res) => {
+    try {
+        const user_id = req.body.user_id;
+        const unhashedPassword = req.body.user_pass;
+        const role_name = req.body.role_name;
+        const user_name = req.body.user_name;
+        const hashedPassword = await middleware.hashPassword(unhashedPassword);
+        const result = await adminService.createUser(user_id, hashedPassword, role_name, user_name);
+        console.log(result);
+        return res.status(200).json({status: 'user created successfully'});
+    } catch (error) {
+        return res.status(500).json({status: 'Internal Server Error'});
+    }
+};
+
 module.exports = {
     fetchAllUserReports,
     fetchAllActionReports,
@@ -181,5 +197,6 @@ module.exports = {
     InsertAssignTask,
     DeleteUserReport,
     DeleteActionReport,
-    ApproveActionReport
+    ApproveActionReport,
+    createUser
 };

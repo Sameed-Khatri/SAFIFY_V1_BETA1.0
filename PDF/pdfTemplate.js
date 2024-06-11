@@ -15,69 +15,97 @@ async function fetchImage(url) {
 async function generatePDF(reports, outputFilePath) {
   const doc = new PDFDocument({ margin: 30 });
   const writeStream = fs.createWriteStream(outputFilePath);
-  const logoPath = path.join(__dirname, '../assets/safify logo new.png'); // Adjust the path as needed
+  const logoPath = path.join(__dirname, '../assets/Safify Logo Current.jpeg'); // Adjust the path as needed
 
   doc.pipe(writeStream);
 
-  // Add a title page
-  const addTitlePage = () => {
-    const currentDate = new Date();
-    const formattedDate = `${currentDate.toDateString()}`;
-
-    doc.image(logoPath, doc.page.width - 150, 20, { width: 100 });
-    doc.moveDown(4);
-    doc.fontSize(30).text('User Reports', { align: 'center' }).moveDown(2);
-    doc.fontSize(20).text(`Date: ${formattedDate}`, { align: 'center' }).moveDown(10);
-    doc.addPage();
-  };
-
-  // Add a header with the logo on each page
+  // Add header
   const addHeader = () => {
-    doc.image(logoPath, doc.page.width - 150, 20, { width: 100 });
+    doc.image(logoPath, 30, 20, { width: 100 });
+    doc.fontSize(12).text('Team Safify', 450, 20, { align: 'right' });
+    doc.fontSize(10).text('Address Line 1', 450, 35, { align: 'right' });
+    doc.fontSize(10).text('Address Line 2', 450, 50, { align: 'right' });
     doc.moveDown(2);
   };
 
-  doc.on('pageAdded', addHeader);
+  // Add title
+  const addTitle = () => {
+    doc.fontSize(18).text('Building Inspection Report', { align: 'center' }).moveDown(0.5);
+    doc.fontSize(12).text('Prepared By: Safify Team', { align: 'center' }).moveDown(1);
+    const currentDate = new Date();
+    doc.fontSize(12).text(`Date: ${currentDate.toDateString()}`, { align: 'center' }).moveDown(2);
+  };
 
-  // Add title page first
-  addTitlePage();
+  // Add report details in a table-like format
+  const addReportDetails = async (report) => {
+    doc.moveDown(1);
 
-  for (const report of reports) {
-    addHeader();
-
-    doc.fontSize(18).text('Incident Report', { align: 'center' }).moveDown();
-
-    doc.fontSize(12).text(`Report ID: ${report['Report ID']}`);
-    doc.fontSize(12).text(`User ID: ${report['User ID']}`);
-    doc.fontSize(12).text(`User Name: ${report['User Name']}`);
-    doc.fontSize(12).text(`Report Completion Status: ${report['Report Completion Status']}`);
-    doc.fontSize(12).text(`Report Description: ${report['Report Description']}`);
-    doc.fontSize(12).text(`Reporting Date Time: ${report['Reporting Date Time']}`);
-    doc.fontSize(12).text(`Reporting Location: ${report['Reporting Location']}`);
-    doc.fontSize(12).text(`Reporting Sub Location: ${report['Reporting Sub Location']}`);
-    doc.fontSize(12).text(`Incident Type: ${report['Incident Type']}`);
-    doc.fontSize(12).text(`Incident Sub Type: ${report['Incident Sub Type']}`);
-    doc.fontSize(12).text(`Incident Criticality: ${report['Incident Criticality']}`);
-
-    // Fetch and embed the image
-    if (report['Image']) {
-      try {
-        const imageBuffer = await fetchImage(report['Image']);
-        doc.text('Image:').moveDown(0.5);
-        doc.image(imageBuffer, {
-          fit: [500, 300],
-          align: 'center',
-          valign: 'center'
-        }).moveDown();
-      } catch (error) {
-        console.error('Error fetching image:', error);
-        doc.text('Image could not be loaded.');
-      }
-    } else {
-      doc.text('No image available.');
+    // Add images
+    const imageY = doc.y;
+    try {
+      const imageBuffer = await fetchImage(report['Image']);
+      doc.image(imageBuffer, 400, imageY, {
+        fit: [150, 150],
+        align: 'center',
+        valign: 'center'
+      });
+    } catch (error) {
+      console.error('Error fetching image:', error);
+      doc.text('Image could not be loaded.', 400, imageY);
     }
 
-    doc.addPage(); // Add a new page for each report
+    // Add details in a table-like format
+    doc.moveTo(30, imageY).lineTo(570, imageY).stroke();
+    doc.fontSize(12).fillColor('black');
+
+    const details = [
+      { label: 'Report ID', value: report['Report ID'] },
+      { label: 'User ID', value: report['User ID'] },
+      { label: 'User Name', value: report['User Name'] },
+      { label: 'Report Completion Status', value: report['Report Completion Status'] },
+      { label: 'Report Description', value: report['Report Description'] },
+      { label: 'Reporting Date Time', value: new Date(report['Reporting Date Time']).toLocaleString() },
+      { label: 'Reporting Location', value: report['Reporting Location'] },
+      { label: 'Reporting Sub Location', value: report['Reporting Sub Location'] },
+      { label: 'Incident Type', value: report['Incident Type'] },
+      { label: 'Incident Sub Type', value: report['Incident Sub Type'] },
+      { label: 'Incident Criticality', value: report['Incident Criticality'] },
+    ];
+
+    const startX = 30;
+    const startY = imageY + 160;
+
+    details.forEach((detail, index) => {
+      const yPosition = startY + index * 20;
+      doc.font('Helvetica-Bold').text(`${detail.label}: `, startX, yPosition, { continued: true })
+        .font('Helvetica').text(detail.value);
+    });
+
+    doc.moveDown(3);
+  };
+
+  // Add footer with page numbers
+  const addFooter = (pageNumber) => {
+    doc.fontSize(10).text(`Page ${pageNumber}`, {
+      align: 'center',
+      baseline: 'bottom'
+    });
+  };
+
+  // Generate the PDF
+  addHeader();
+  addTitle();
+
+  let pageNumber = 1;
+  for (const report of reports) {
+    await addReportDetails(report);
+    addFooter(pageNumber);
+    pageNumber++;
+    if (pageNumber <= reports.length) {
+      doc.addPage();
+      addHeader();
+      addTitle();
+    }
   }
 
   doc.end();

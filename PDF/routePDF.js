@@ -6,9 +6,6 @@ const { Router } = require('express');
 const router = Router();
 
 router.get('/reports', async (req, res) => {
-    // const { date, month } = req.query;
-
-    // Modify your SQL query as needed
     let sqlQuery = `SELECT user_report_id as 'Report ID', ur.user_id as 'User ID', user_name as 'User Name', status as 'Report Completion Status', 
                     image as 'Image', report_description as 'Report Description', date_time as 'Reporting Date Time', location_name as 'Reporting Location',
                     sub_location_name as 'Reporting Sub Location', incident_type_description as 'Incident Type', incident_subtype_description as 'Incident Sub Type', 
@@ -22,7 +19,7 @@ router.get('/reports', async (req, res) => {
                     JOIN users u ON ur.user_id=u.user_id`;
 
     try {
-        const [results] = await db.query(sqlQuery); // Use promise-based query
+        const [results] = await db.query(sqlQuery);
         const outputFilePath = path.join(__dirname, 'reports.pdf');
         await generatePDF(results, outputFilePath);
 

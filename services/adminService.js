@@ -120,6 +120,15 @@ const getActionTeamUserIDFromActionTeamID = async (action_team_id) => {
     }
 };
 
+const createUser = async (user_id, user_pass, role_name, user_name) => {
+    try {
+        return await adminModel.createUser(user_id, user_pass, role_name, user_name);
+    } catch (error) {
+        console.error('Error service create user: ', error);
+        throw error;
+    }
+};
+
 module.exports = {
     fetchAllUserReports,
     fetchAllActionReports,
@@ -133,5 +142,6 @@ module.exports = {
     //updateActionTeamPushNotification,
     getUseridFromUserReportid,
     //updateUserPushNotification,
-    getActionTeamUserIDFromActionTeamID
+    getActionTeamUserIDFromActionTeamID,
+    createUser
 };

@@ -2,6 +2,7 @@ const { Router } = require('express');
 const router = Router();
 const adminController = require('../controllers/adminController');
 const authenticate = require('../middlewares/authenticateToken');
+const pdfController = require('../controllers/pdfController');
 
 const role = 'admin';
 
@@ -13,5 +14,8 @@ router.post('/dashboard/insertAssignTask', authenticate.authenticateToken, authe
 router.delete('/dashboard/deleteUserReport/:user_report_id', authenticate.authenticateToken, authenticate.authorizeRoles(role), adminController.DeleteUserReport);
 router.delete('/dashboard/deleteActionReport/:action_report_id', authenticate.authenticateToken, authenticate.authorizeRoles(role), adminController.DeleteActionReport);
 router.post('/dashboard/approvedActionReport', authenticate.authenticateToken, authenticate.authorizeRoles(role), adminController.ApproveActionReport);
+router.post('/dashboard/createUser', authenticate.authenticateToken, authenticate.authorizeRoles(role), adminController.createUser);
+router.get('/dashboard/generateUserReportPDF', authenticate.authenticateToken, authenticate.authorizeRoles(role), pdfController.generatePdfReport);
+router.get('/dashboard/generateActionReportPDF', authenticate.authenticateToken, authenticate.authorizeRoles(role), pdfController.generateActionReportPdf);
 
 module.exports = router;
