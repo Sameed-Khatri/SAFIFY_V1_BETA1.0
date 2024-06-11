@@ -4,7 +4,7 @@ const axios = require('axios');
 const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');
-const pdf = require('html-pdf');
+const puppeteer = require('puppeteer');
 
 const fetchImage = async (url) => {
     try {
@@ -22,8 +22,8 @@ const fetchImage = async (url) => {
 const compressImageBuffer = async (imageBuffer) => {
     try {
         const compressedImageBuffer = await sharp(imageBuffer)
-            .resize(400) // Resize to 800px width
-            .jpeg({ quality: 50 }) // Compress with JPEG quality 60
+            .resize(400) // Resize to 400px width
+            .jpeg({ quality: 50 }) // Compress with JPEG quality 50
             .toBuffer();
         return `data:image/jpeg;base64,${compressedImageBuffer.toString('base64')}`;
     } catch (error) {
@@ -51,6 +51,17 @@ const getBase64Image = async (imgPath) => {
     return '';
 };
 
+const generatePdfWithPuppeteer = async (html) => {
+    const browser = await puppeteer.launch({
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+    const page = await browser.newPage();
+    await page.setContent(html);
+    const pdfBuffer = await page.pdf({ format: 'A4' });
+    await browser.close();
+    return pdfBuffer;
+};
+
 const generatePdf = async (year = null, month = null, date = null) => {
     const data = await pdfModel.GetUserReportsPDF(year, month, date);
     const logoPath = path.resolve(__dirname, '../assets/Safify Logo Current.jpeg');
@@ -65,24 +76,8 @@ const generatePdf = async (year = null, month = null, date = null) => {
     }
 
     const html = htmlTemplate.generateHtml(data, logoBase64, currentDate); // Generate HTML
-
-    const options = {
-        format: 'A4',
-        orientation: 'portrait',
-        type: 'pdf',
-        quality: '75',
-        timeout: 300000, // Increase timeout to 5 minutes
-        phantomArgs: ['--web-security=no', '--local-url-access=false', '--ignore-ssl-errors=true'],
-    };
-
-    return new Promise((resolve, reject) => {
-        pdf.create(html, options).toStream((err, stream) => {
-            if (err) {
-                return reject(err);
-            }
-            resolve(stream);
-        });
-    });
+    const pdfBuffer = await generatePdfWithPuppeteer(html);
+    return pdfBuffer;
 };
 
 const generateActionReportPdf = async (year = null, month = null, date = null) => {
@@ -102,24 +97,8 @@ const generateActionReportPdf = async (year = null, month = null, date = null) =
     }
 
     const html = htmlTemplate.generateActionReportHtml(data, logoBase64, currentDate); // Generate HTML
-
-    const options = {
-        format: 'A4',
-        orientation: 'portrait',
-        type: 'pdf',
-        quality: '75',
-        timeout: 300000, // Increase timeout to 5 minutes
-        phantomArgs: ['--web-security=no', '--local-url-access=false', '--ignore-ssl-errors=true'],
-    };
-
-    return new Promise((resolve, reject) => {
-        pdf.create(html, options).toStream((err, stream) => {
-            if (err) {
-                return reject(err);
-            }
-            resolve(stream);
-        });
-    });
+    const pdfBuffer = await generatePdfWithPuppeteer(html);
+    return pdfBuffer;
 };
 
 module.exports = {
