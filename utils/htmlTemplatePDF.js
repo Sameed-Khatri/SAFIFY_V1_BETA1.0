@@ -8,7 +8,7 @@ const generateHtml = (data, logoBase64, currentDate) => {
         <title>Incident Reports</title>
         <style>
             body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-            .header-table { width: 100%; margin-bottom: 20px; }
+            .header-table { width: 98%; margin-bottom: 20px; }
             .header-table td { vertical-align: middle; }
             .header-table img { width: 150px; }
             .header-table .address { text-align: right; }
@@ -16,9 +16,14 @@ const generateHtml = (data, logoBase64, currentDate) => {
             .title-page-content { display: table-cell; text-align: center; vertical-align: middle; }
             .title-page h1 { margin: 0; }
             .title-page p { margin: 10px 0 0 0; }
-            .details, .inspection-details { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            .details, .inspection-details { width: 95%; margin: 0 auto; border-collapse: collapse; margin-top: 20px; }
             .details td, .details th, .inspection-details td, .inspection-details th { border: 1px solid black; padding: 8px; }
             .details th, .inspection-details th { text-align: left; background-color: #f2f2f2; }
+            .image-table { width: 95%; margin: 20px auto; border-collapse: collapse; }
+            .image-table td, .image-table th { border: 1px solid black; padding: 8px; text-align: center; }
+            .image-table th { background-color: #f2f2f2; }
+            .image-container img { width: 100%; height: auto; max-width: 250px; max-height: 250px; object-fit: contain; }
+            h3 { margin-bottom: 0; font-size: 14px; }
             .page-break { page-break-before: always; }
         </style>
     </head>
@@ -33,7 +38,7 @@ const generateHtml = (data, logoBase64, currentDate) => {
     `;
 
     for (const report of data) {
-        const imageHtml = report.Image ? `<img src="${report.Image}" alt="Incident Image" style="width: 100%; height: auto;">` : 'No Image';
+        const imageHtml = report.Image ? `<img src="${report.Image}" class="image-container" alt="Incident Image" style="max-width: 250px; max-height: 250px;">` : 'No Image';
         html += `
         <table class="header-table">
             <tr>
@@ -50,29 +55,42 @@ const generateHtml = (data, logoBase64, currentDate) => {
             <tr>
                 <th>Report ID</th>
                 <td>${report['Report ID']}</td>
+            </tr>
+            <tr>
                 <th>Incident Type</th>
                 <td>${report['Incident Type']}</td>
-                <th rowspan="6">
-                    ${imageHtml}
-                </th>
             </tr>
             <tr>
                 <th>Report Description</th>
                 <td>${report['Report Description']}</td>
+            </tr>
+            <tr>
                 <th>Incident Sub Type</th>
                 <td>${report['Incident Sub Type']}</td>
             </tr>
             <tr>
                 <th>Reporting Location</th>
                 <td>${report['Reporting Location']}</td>
+            </tr>
+            <tr>
                 <th>Reporting Sub Location</th>
                 <td>${report['Reporting Sub Location']}</td>
             </tr>
             <tr>
                 <th>Incident Criticality</th>
                 <td>${report['Incident Criticality']}</td>
+            </tr>
+            <tr>
                 <th>Report Completion Status</th>
                 <td>${report['Report Completion Status']}</td>
+            </tr>
+        </table>
+        <table class="image-table">
+            <tr>
+                <th>Incident Image</th>
+            </tr>
+            <tr>
+                <td>${imageHtml}</td>
             </tr>
         </table>
         ${data.indexOf(report) < data.length - 1 ? '<div class="page-break"></div>' : ''}
@@ -146,6 +164,8 @@ const generateActionReportHtml = (data, logoBase64, currentDate) => {
                 <tr>
                     <th>Action Report ID</th>
                     <td>${report['Action Report ID']}</td>
+                </tr>
+                <tr>
                     <th>Reported By</th>
                     <td>${report['Reported By']}</td>
                 </tr>

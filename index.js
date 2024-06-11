@@ -11,8 +11,6 @@ const actionTeamRoutes = require('./routes/actionTeamRoutes');
 const userReportRoutes = require('./routes/userReportRoutes');
 const analyticsRoutes = require('./routes/analyticsRoutes');
 const helperRoutes = require('./routes/helperRoutes');
-const pdf = require('./PDF/routePDF');
-const pdf2 = require('./PDFnew/route');
 
 app.use(cors());
 app.use(express.json());
@@ -34,8 +32,6 @@ app.use('/actionTeam',actionTeamRoutes);
 app.use('/userReport',userReportRoutes);
 app.use('/analytics',analyticsRoutes);
 app.use('/helper', helperRoutes);
-app.use('/PDF',pdf);
-app.use('/PDF2',pdf2);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
