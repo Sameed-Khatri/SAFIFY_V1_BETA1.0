@@ -2,16 +2,19 @@ const generatePdfTemplate = (data, logoBase64, currentDate) => {
     return {
         content: [
             {
-                text: 'Incident Reports',
-                style: 'header',
-                pageBreak: 'before'
-            },
-            {
-                text: currentDate,
-                style: 'subheader'
-            },
-            {
-                text: '',
+                stack: [
+                    {
+                        text: 'Incident Reports',
+                        style: 'header',
+                        alignment: 'center'
+                    },
+                    {
+                        text: currentDate,
+                        style: 'subheader',
+                        alignment: 'center'
+                    }
+                ],
+                margin: [0, 200, 0, 0],
                 pageBreak: 'after'
             },
             ...data.map(report => ({
@@ -110,16 +113,19 @@ const generateActionReportPdfTemplate = (data, logoBase64, currentDate) => {
     return {
         content: [
             {
-                text: 'Action Reports',
-                style: 'header',
-                pageBreak: 'before'
-            },
-            {
-                text: currentDate,
-                style: 'subheader'
-            },
-            {
-                text: '',
+                stack: [
+                    {
+                        text: 'Action Reports',
+                        style: 'header',
+                        alignment: 'center'
+                    },
+                    {
+                        text: currentDate,
+                        style: 'subheader',
+                        alignment: 'center'
+                    }
+                ],
+                margin: [0, 200, 0, 0],
                 pageBreak: 'after'
             },
             ...data.map(report => ({
