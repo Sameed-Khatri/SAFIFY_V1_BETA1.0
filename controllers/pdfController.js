@@ -2,7 +2,8 @@ const pdfService = require('../services/pdfService');
 
 const generatePdfReport = async (req, res) => {
     try {
-        const pdfBuffer = await pdfService.generatePdf();
+        const { year, month, date } = req.query;
+        const pdfBuffer = await pdfService.generatePdf(year, month, date);
         res.setHeader('Content-type', 'application/pdf');
         res.send(pdfBuffer);
     } catch (error) {

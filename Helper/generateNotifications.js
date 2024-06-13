@@ -7,7 +7,7 @@ const fetchDeviceToken = async (user_id) => {
         const result = await db.query(query, [user_id]);
         const deviceToken = result[0][0][0].token;
         if(!deviceToken) {
-            throw new Error('No device toke for procided user ID');
+            throw new Error('No device token for provided user ID');
         };
         return deviceToken;
     } catch (error) {
@@ -20,7 +20,7 @@ const sendNotification = async (user_id, messageTitle, messageBody) => {
     try {
         const deviceToken = await fetchDeviceToken(user_id);
         if(!deviceToken) {
-            throw new Error('No device toke for provided user ID');
+            throw new Error('No device token for provided user ID');
         };
 
         const message = {
