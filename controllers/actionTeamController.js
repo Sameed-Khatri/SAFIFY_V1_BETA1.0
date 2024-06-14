@@ -19,11 +19,15 @@ const MakeActionReport = async (req,res) => {
         const actionReportID = await actionTeamService.MakeActionReport(reportData,req.files);
         console.log('CONTROLLER');
         console.log(actionReportID);
-        const adminUserID = await actionTeamService.getAdminUserID();
-        console.log(adminUserID);
+        const admins = await actionTeamService.getAdminUserID();
+        console.log(admins);
         const messageTitle = 'New Action Report Submitted';
         const messageBody = `New action report (report number: ${actionReportID}) has been submitted.`;
-        const response = await helper.sendNotification(adminUserID,messageTitle,messageBody);
+        for (const admin of admins) {
+            console.log(admin);
+            const response = await helper.sendNotification(admin.user_id,messageTitle,messageBody);
+            console.log(response);
+        };
         console.log(response);
         return res.status(200).json({status: 'report submitted'});
     } catch (error) {

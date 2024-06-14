@@ -13,12 +13,15 @@ const makeUserReport = async (req, res) => {
         };
         const userReportID = await userReportService.makeUserReport(reportData,req.file);
         console.log(userReportID);
-        const adminUserID = await userReportService.getAdminUserID();
-        console.log(adminUserID);
+        const admins = await userReportService.getAdminUserID();
+        console.log(admins);
         const messageTitle = 'New Incident Report Submitted';
         const messageBody = `New incident report (report number: ${userReportID}) has been submitted.`;
-        const response = await helper.sendNotification(adminUserID,messageTitle,messageBody);
-        console.log(response);
+        for (const admin of admins) {
+            console.log(admin);
+            const response = await helper.sendNotification(admin.user_id,messageTitle,messageBody);
+            console.log(response);
+        };
         return res.status(200).json({status: 'report submitted'});
     } catch (error) {
         console.log(error);
@@ -86,5 +89,6 @@ module.exports = {
     fetchSubLocations,
     fetchLocations,
     fetchIncidentTypes,
-    fetchIncidentSubTypes
+    fetchIncidentSubTypes,
+    getAdminUserid
 };
