@@ -57,8 +57,9 @@ const getAdminUserID = async () => {
     try {
         const query = `CALL getAdminUserID()`;
         const result = await db.query(query);
-        const adminUserID = result[0][0][0].user_id;
-        return adminUserID;
+        const adminsUserID = result[0][0];
+        console.log(result[0][0]);
+        return adminsUserID;
     } catch (error) {
         console.error('Error model fetching admin user id: ', error);
         throw error;

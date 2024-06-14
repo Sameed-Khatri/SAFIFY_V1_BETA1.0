@@ -89,6 +89,5 @@ module.exports = {
     fetchSubLocations,
     fetchLocations,
     fetchIncidentTypes,
-    fetchIncidentSubTypes,
-    getAdminUserid
+    fetchIncidentSubTypes
 };
