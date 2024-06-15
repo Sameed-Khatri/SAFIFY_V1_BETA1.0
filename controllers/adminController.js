@@ -300,23 +300,6 @@ const createUser = async (req, res) => {
     }
 };
 
-const getTemp = async (req, res) => {
-    try {
-        const action_report_id = req.body.action_report_id;
-        const userIDArray = await adminService.getUseridFromActionReportid(action_report_id);
-        const result = userIDArray[0][0].userID;
-        console.log('useridarray: ',userIDArray);
-        console.log('result: ',result);
-        const [userID, userReportUserID] = result.split(',');
-        console.log('userID:', userID);
-        console.log('userReportUserID:', userReportUserID);
-        return res.status(200).json({status: 'done'});
-    } catch (error) {
-        console.log(error.message);
-        return res.status(500).json({status: 'Internal Server Error'});
-    }
-};
-
 module.exports = {
     fetchAllUserReports,
     fetchAllActionReports,
@@ -326,6 +309,5 @@ module.exports = {
     DeleteUserReport,
     DeleteActionReport,
     ApproveActionReport,
-    createUser,
-    getTemp
+    createUser
 };
