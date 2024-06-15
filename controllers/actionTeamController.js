@@ -1,5 +1,6 @@
 const actionTeamService = require('../services/actionTeamService');
 const helper = require('../Helper/generateNotifications');
+const redisOperation = require('../middlewares/redisOperation');
 
 const MakeActionReport = async (req,res) => {
     try {
@@ -29,6 +30,13 @@ const MakeActionReport = async (req,res) => {
             console.log(response);
         };
         console.log(response);
+
+        const cacheKey1 = `actionReportsAll`;
+        await redisOperation.setCache(cacheKey1, null, 0);
+
+        const cacheKey2 = `assignedTasksActionTeam:${req.params.userid}`;
+        await redisOperation.setCache(cacheKey2, null, 0);
+
         return res.status(200).json({status: 'report submitted'});
     } catch (error) {
         console.log(error);
@@ -39,13 +47,21 @@ const MakeActionReport = async (req,res) => {
 const FetchAssignedTasks = async (req, res) => {
     try {
         const action_team_id = req.params.userid;
+
+        // Check cache first
+        const cacheKey = `assignedTasksActionTeam:${action_team_id}`;
+        const cachedData = await redisOperation.getCache(cacheKey);
+        if (cachedData) {
+            console.log('data found in redis cache: ',cachedData);
+            return res.status(200).json(cachedData);
+        }
+
         const result = await actionTeamService.FetchAssignedTasks(action_team_id);
-        // const data = await actionTeamService.fetchPushNotificationData(action_team_id);
-        // const response = {
-        //     result: result,
-        //     is_report_deleted: data[0].is_report_deleted,
-        //     deleted_report_id: data[0].deleted_report_id
-        // };
+
+        // Set cache
+        console.log('setting data in redis cache');
+        await redisOperation.setCache(cacheKey, result);
+
         return res.status(200).json(result);
     } catch (error) {
         return res.status(500).json({ status: 'Internal server error' });
