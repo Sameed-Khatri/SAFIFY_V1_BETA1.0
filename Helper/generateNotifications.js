@@ -7,7 +7,8 @@ const fetchDeviceToken = async (user_id) => {
         const result = await db.query(query, [user_id]);
         const deviceToken = result[0][0][0].token;
         if(!deviceToken) {
-            throw new Error('No device token for provided user ID');
+            console.warn(`No device token for user ID: ${user_id}`);
+            return null;
         };
         return deviceToken;
     } catch (error) {
@@ -16,11 +17,22 @@ const fetchDeviceToken = async (user_id) => {
     }
 };
 
+const removeInvalidToken = async (user_id) => {
+    try {
+        const query = `CALL removeInvalidDeviceToken(?)`;
+        await db.query(query, [user_id]);
+        console.log(`Set device token to NULL for user ID: ${user_id}`);
+    } catch (error) {
+        console.error('Error setting device token to NULL: ', error);
+    }
+};
+
 const sendNotification = async (user_id, messageTitle, messageBody) => {
     try {
         const deviceToken = await fetchDeviceToken(user_id);
         if(!deviceToken) {
-            throw new Error('No device token for provided user ID');
+            console.warn(`Skipping notification for user ID: ${user_id} due to null or invalid device token`);
+            return null;
         };
 
         const message = {
@@ -55,7 +67,12 @@ const sendNotification = async (user_id, messageTitle, messageBody) => {
         return response;
     } catch (error) {
         console.error('Error sending notification: ', error);
-        throw error;
+        if (error.errorInfo && error.errorInfo.code === 'messaging/registration-token-not-registered') {
+            console.log(`Invalid registration token for user ID: ${user_id}`);
+            await removeInvalidToken(user_id);
+        }
+        // Do not throw the error to avoid disrupting the caller
+        // throw error;
     }
 };
 
