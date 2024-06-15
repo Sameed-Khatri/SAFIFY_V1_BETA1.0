@@ -25,10 +25,10 @@ const makeUserReport = async (req, res) => {
         };
 
         const cacheKey1 = `userReports:${req.params.userid}`;
-        await redisOperation.setCache(cacheKey1, null, 0);
+        await redisOperation.delCache(cacheKey1);
 
         const cacheKey2 = `userReportsAll`;
-        await redisOperation.setCache(cacheKey2, null, 0);
+        await redisOperation.delCache(cacheKey2);
 
         return res.status(200).json({status: 'report submitted'});
     } catch (error) {
@@ -45,7 +45,7 @@ const fetchUserReports = async (req, res) => {
         const cacheKey = `userReports:${user_id}`;
         const cachedData = await redisOperation.getCache(cacheKey);
         if (cachedData) {
-            console.log('data found in redis cache: ',cachedData);
+            console.log('data found in redis cache: ');
             return res.status(200).json(cachedData);
         }
 
@@ -69,7 +69,7 @@ const fetchSubLocations = async (req, res) => {
         const cacheKey = `subLocations:${location_id}`;
         const cachedData = await redisOperation.getCache(cacheKey);
         if (cachedData) {
-            console.log('data found in redis cache: ',cachedData);
+            console.log('data found in redis cache: ');
             return res.status(200).json(cachedData);
         }
 
@@ -91,7 +91,7 @@ const fetchLocations = async (req, res) => {
         const cacheKey = `locations`;
         const cachedData = await redisOperation.getCache(cacheKey);
         if (cachedData) {
-            console.log('data found in redis cache: ',cachedData);
+            console.log('data found in redis cache: ');
             return res.status(200).json(cachedData);
         }
 
@@ -113,7 +113,7 @@ const fetchIncidentTypes = async (req, res) => {
         const cacheKey = `incidentTypes`;
         const cachedData = await redisOperation.getCache(cacheKey);
         if (cachedData) {
-            console.log('data found in redis cache: ',cachedData);
+            console.log('data found in redis cache: ');
             return res.status(200).json(cachedData);
         }
 
@@ -137,7 +137,7 @@ const fetchIncidentSubTypes = async (req, res) => {
         const cacheKey = `incidentSubTypes:${incident_type_id}`;
         const cachedData = await redisOperation.getCache(cacheKey);
         if (cachedData) {
-            console.log('data found in redis cache: ',cachedData);
+            console.log('data found in redis cache: ');
             return res.status(200).json(cachedData);
         }
 

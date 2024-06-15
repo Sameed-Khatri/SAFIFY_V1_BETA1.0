@@ -20,7 +20,16 @@ const setCache = async (key, value, expiration = 1800) => {
     }
 };
 
+const delCache = async (key) => {
+    try {
+        await redisClient.del(key);
+    } catch (err) {
+        console.error('Redis DEL error:', err);
+    }
+};
+
 module.exports = {
     getCache,
     setCache,
+    delCache
 };

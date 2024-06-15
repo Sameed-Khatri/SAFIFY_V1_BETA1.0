@@ -9,7 +9,8 @@ const fetchAllUserReports = async (req, res) => {
         const cacheKey = `userReportsAll`;
         const cachedData = await redisOperation.getCache(cacheKey);
         if (cachedData) {
-            console.log('data found in redis cache: ',cachedData);
+            //console.log('data found in redis cache: ',cachedData);
+            console.log('data found in redis cache: ');
             return res.status(200).json(cachedData);
         }
 
@@ -31,7 +32,7 @@ const fetchAllActionReports = async (req, res) => {
         const cacheKey = `actionReportsAll`;
         const cachedData = await redisOperation.getCache(cacheKey);
         if (cachedData) {
-            console.log('data found in redis cache: ',cachedData);
+            console.log('data found in redis cache: ');
             return res.status(200).json(cachedData);
         }
 
@@ -53,7 +54,7 @@ const fetchAllDepartments = async (req, res) => {
         const cacheKey = `departments`;
         const cachedData = await redisOperation.getCache(cacheKey);
         if (cachedData) {
-            console.log('data found in redis cache: ',cachedData);
+            console.log('data found in redis cache: ');
             return res.status(200).json(cachedData);
         }
 
@@ -80,7 +81,7 @@ const fetchAllActionTeams = async (req, res) => {
         const cacheKey = `allActionTeams:${deptID}`;
         const cachedData = await redisOperation.getCache(cacheKey);
         if (cachedData) {
-            console.log('data found in redis cache: ',cachedData);
+            console.log('data found in redis cache: ');
             return res.status(200).json(cachedData);
         }
 
@@ -121,16 +122,16 @@ const InsertAssignTask = async (req, res) => {
         const response1 = await helper.sendNotification(actionTeamUserID,messageTitle1,messageBody1);
         const response2 = await helper.sendNotification(user_id,messageTitle2,messageBody2);
         console.log(response1,response2);
-
+        console.log(actionTeamUserID);
         // set relevant cache keys to null since data is being changed
         const cacheKey1 = `userReports:${user_id}`;
-        await redisOperation.setCache(cacheKey1, null, 0);
+        await redisOperation.delCache(cacheKey1);
 
         const cacheKey2 = `userReportsAll`;
-        await redisOperation.setCache(cacheKey2, null, 0);
+        await redisOperation.delCache(cacheKey2);
 
-        const cacheKey3 = `assignedTasksActionTeam:${action_team_id}`;
-        await redisOperation.setCache(cacheKey3, null, 0);
+        const cacheKey3 = `assignedTasksActionTeam:${actionTeamUserID}`;
+        await redisOperation.delCache(cacheKey3);
 
         return res.status(200).json({status: 'inserted in assigned task with updating criticality in user report'});
     } catch (error) {
@@ -171,10 +172,10 @@ const DeleteUserReport = async (req, res) => {
         
         // set relevant cache keys to null since data is being changed
         const cacheKey1 = `userReports:${userID}`;
-        await redisOperation.setCache(cacheKey1, null, 0);
+        await redisOperation.delCache(cacheKey1);
  
         const cacheKey2 = `userReportsAll`;
-        await redisOperation.setCache(cacheKey2, null, 0);
+        await redisOperation.delCache(cacheKey2);
         
         return res.status(200).json({status: 'deleted user report'});
     } catch (error) {
@@ -219,11 +220,11 @@ const DeleteActionReport = async (req, res) => {
         console.log(response);
 
         // set relevant cache keys to null since data is being changed
-        const cacheKey1 = `userReports:${userReportUserID}`;
-        await redisOperation.setCache(cacheKey1, null, 0);
- 
-        const cacheKey2 = `userReportsAll`;
-        await redisOperation.setCache(cacheKey2, null, 0);
+        const cacheKey1 = `actionReportsAll`;
+        await redisOperation.delCache(cacheKey1);
+
+        const cacheKey2 = `assignedTasksActionTeam:${userID}`;
+        await redisOperation.delCache(cacheKey2);
 
         return res.status(200).json({status: 'deleted action report'});
     } catch (error) {
@@ -243,7 +244,7 @@ const ApproveActionReport = async (req, res) => {
         
         const actionTeamUserIDArray = await adminService.getUseridFromActionReportid(action_report_id);
         const output = actionTeamUserIDArray[0][0].userID;
-        console.log('actionteamuseridarray: ',userIDArray);
+        console.log('actionteamuseridarray: ',actionTeamUserIDArray);
         console.log('output: ',output);
         const [actionTeamUserID, userReportUserID] = output.split(',');
         console.log('actionteamUserID:', actionTeamUserID);
@@ -268,19 +269,20 @@ const ApproveActionReport = async (req, res) => {
 
         // set relevant cache keys to null since data is being changed
         const cacheKey1 = `userReports:${userID}`;
-        await redisOperation.setCache(cacheKey1, null, 0);
+        await redisOperation.delCache(cacheKey1);
  
         const cacheKey2 = `userReportsAll`;
-        await redisOperation.setCache(cacheKey2, null, 0);
+        await redisOperation.delCache(cacheKey2);
 
         const cacheKey3 = `actionReportsAll`;
-        await redisOperation.setCache(cacheKey3, null, 0);
+        await redisOperation.delCache(cacheKey3);
 
         const cacheKey4 = `assignedTasksActionTeam:${actionTeamUserID}`;
-        await redisOperation.setCache(cacheKey4, null, 0);
+        await redisOperation.delCache(cacheKey4);
 
         return res.status(200).json({status: 'action report approved'});
     } catch (error) {
+        console.log(error.message);
         return res.status(500).json({status: 'Internal Server Error'});
     }
 };

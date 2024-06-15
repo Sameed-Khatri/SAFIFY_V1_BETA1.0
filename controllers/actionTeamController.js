@@ -29,13 +29,12 @@ const MakeActionReport = async (req,res) => {
             const response = await helper.sendNotification(admin.user_id,messageTitle,messageBody);
             console.log(response);
         };
-        console.log(response);
 
         const cacheKey1 = `actionReportsAll`;
-        await redisOperation.setCache(cacheKey1, null, 0);
+        await redisOperation.delCache(cacheKey1);
 
         const cacheKey2 = `assignedTasksActionTeam:${req.params.userid}`;
-        await redisOperation.setCache(cacheKey2, null, 0);
+        await redisOperation.delCache(cacheKey2);
 
         return res.status(200).json({status: 'report submitted'});
     } catch (error) {
@@ -52,7 +51,7 @@ const FetchAssignedTasks = async (req, res) => {
         const cacheKey = `assignedTasksActionTeam:${action_team_id}`;
         const cachedData = await redisOperation.getCache(cacheKey);
         if (cachedData) {
-            console.log('data found in redis cache: ',cachedData);
+            console.log('data found in redis cache: ');
             return res.status(200).json(cachedData);
         }
 
