@@ -5,7 +5,7 @@ const checkCredentials = async (user_id) => {
         //console.log(user_id,user_pass);
         const query = `CALL CheckCredentials(?)`;
         const result = await db.query(query,[user_id]);
-        //console.log('result model:',result);
+        //console.log('result model:',result[0][0]);
         return result[0];
     } catch (error) {
         console.error('Error model checking credentials: ', error);

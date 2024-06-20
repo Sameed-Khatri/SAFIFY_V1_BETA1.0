@@ -6,10 +6,15 @@ const storeDeviceToken = require('../Helper/storeDeviceToken')
 const checkCredentials = async (user_id,user_pass,device_token) => {
     try {
         const user = await loginModel.checkCredentials(user_id,user_pass);
-        if(!user) {
+        if(!user[0]) {
             throw new Error('Authentication failed');
         }
+        
         const userData = user[0][0];
+        if(!userData) {
+            throw new Error('Incorrect User ID');
+        };
+        
         const passwordHash = userData.user_pass;
         console.log('passowrd from frontend: ',user_pass);
         console.log('hashed password from DB: ',passwordHash);

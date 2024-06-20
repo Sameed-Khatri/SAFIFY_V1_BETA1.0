@@ -3,8 +3,10 @@ const passwordSecurity = require('../middlewares/passwordSecurity');
 
 const updatePasswords = async () => {
     try {
-        const query = 'SELECT user_id, user_pass FROM users';
-        const users = await db.query(query);
+        const user_pass='123';
+        const role_id='UR2';
+        const query = 'SELECT user_id, user_pass FROM users where user_pass=? and role_id=?';
+        const users = await db.query(query,[user_pass,role_id]);
         console.log(users[0]);
         for (const user of users[0]) {
             const hashedPassword = await passwordSecurity.hashPassword(user.user_pass);
