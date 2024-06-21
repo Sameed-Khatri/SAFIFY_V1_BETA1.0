@@ -153,11 +153,31 @@ const fetchIncidentSubTypes = async (req, res) => {
     }
 };
 
+const getLocationsAndSubLocations = async (req, res) => {
+    try {
+        const result = await userReportService.getLocationsAndSubLocations();
+        return res.status(200).json(result);
+    } catch (error) {
+        return res.status(500).json({ status: 'Internal server error', error: error.message });
+    }
+};
+
+const getIncidetTypesAndIncidentSubTypes = async (req, res) => {
+    try {
+        const result = await userReportService.getIncidetTypesAndIncidentSubTypes();
+        return res.status(200).json(result);
+    } catch (error) {
+        return res.status(500).json({ status: 'Internal server error', error: error.message });
+    }
+};
+
 module.exports = {
     makeUserReport,
     fetchUserReports,
     fetchSubLocations,
     fetchLocations,
     fetchIncidentTypes,
-    fetchIncidentSubTypes
+    fetchIncidentSubTypes,
+    getLocationsAndSubLocations,
+    getIncidetTypesAndIncidentSubTypes
 };
