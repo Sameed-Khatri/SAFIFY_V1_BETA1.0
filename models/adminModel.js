@@ -162,10 +162,10 @@ const getActionTeamUserIDFromActionTeamID = async (action_team_id) => {
     }
 };
 
-const createUser = async (user_id, user_pass, role_name, user_name) => {
+const createUser = async (user_id, user_pass, role_name, user_name, department_id) => {
     try {
-        const query = `CALL createUser(?, ?, ?, ?)`;
-        const result = await db.query(query,[user_id, user_pass, role_name, user_name]);
+        const query = `CALL createUser(?, ?, ?, ?, ?)`;
+        const result = await db.query(query,[user_id, user_pass, role_name, user_name, department_id]);
         console.log(result);
         return result;
     } catch (error) {

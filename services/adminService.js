@@ -120,9 +120,9 @@ const getActionTeamUserIDFromActionTeamID = async (action_team_id) => {
     }
 };
 
-const createUser = async (user_id, user_pass, role_name, user_name) => {
+const createUser = async (user_id, user_pass, role_name, user_name, department_id) => {
     try {
-        return await adminModel.createUser(user_id, user_pass, role_name, user_name);
+        return await adminModel.createUser(user_id, user_pass, role_name, user_name, department_id);
     } catch (error) {
         console.error('Error service create user: ', error);
         throw error;
