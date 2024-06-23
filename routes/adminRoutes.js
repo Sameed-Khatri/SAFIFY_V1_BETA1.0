@@ -16,6 +16,6 @@ router.delete('/dashboard/deleteActionReport/:action_report_id', authenticate.au
 router.post('/dashboard/approvedActionReport', authenticate.authenticateToken, authenticate.authorizeRoles(role), adminController.ApproveActionReport);
 router.post('/dashboard/createUser', authenticate.authenticateToken, authenticate.authorizeRoles(role), adminController.createUser);
 router.get('/dashboard/generateUserReportPDF', authenticate.authenticateToken, authenticate.authorizeRoles(role), pdfController.generatePdfReport);
-router.get('/dashboard/generateActionReportPDF', authenticate.authenticateToken, authenticate.authorizeRoles(role), pdfController.generateActionReportPdf);
+// router.get('/dashboard/generateActionReportPDF', authenticate.authenticateToken, authenticate.authorizeRoles(role), pdfController.generateActionReportPdf);
 
 module.exports = router;
