@@ -294,13 +294,24 @@ const generatePdf = async (year = null, month = null, day = null) => {
     const logoBase64 = await getBase64Image(logoPath);
     const currentDate = new Date().toLocaleString();
 
+    let reportPeriod;
+    if (year && month && day) {
+        reportPeriod = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    } else if (year && month) {
+        reportPeriod = `${year}-${String(month).padStart(2, '0')}`;
+    } else if (year) {
+        reportPeriod = `${year}`;
+    } else {
+        reportPeriod = 'All Reports';
+    }
+
     for (const report of data) {
         if (report['Image']) {
             report['Image'] = await getBase64Image(report['Image']);
         }
     }
 
-    const docDefinition = pdfTemplate.generatePdfTemplate(data, logoBase64, currentDate);
+    const docDefinition = pdfTemplate.generatePdfTemplate(data, logoBase64, currentDate, reportPeriod);
     const pdfBuffer = await generatePdfWithPdfMake(docDefinition);
     return pdfBuffer;
 };
@@ -311,6 +322,17 @@ const generateActionReportPdf = async (year = null, month = null, day = null) =>
     const logoBase64 = await getBase64Image(logoPath);
     const currentDate = new Date().toLocaleString();
 
+    let reportPeriod;
+    if (year && month && day) {
+        reportPeriod = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    } else if (year && month) {
+        reportPeriod = `${year}-${String(month).padStart(2, '0')}`;
+    } else if (year) {
+        reportPeriod = `${year}`;
+    } else {
+        reportPeriod = 'All Reports';
+    }
+
     for (const report of data) {
         if (report['Surrounding Image']) {
             report['Surrounding Image'] = await getBase64Image(report['Surrounding Image']);
@@ -320,7 +342,7 @@ const generateActionReportPdf = async (year = null, month = null, day = null) =>
         }
     }
 
-    const docDefinition = pdfTemplate.generateActionReportPdfTemplate(data, logoBase64, currentDate);
+    const docDefinition = pdfTemplate.generateActionReportPdfTemplate(data, logoBase64, currentDate, reportPeriod);
     const pdfBuffer = await generatePdfWithPdfMake(docDefinition);
     return pdfBuffer;
 };

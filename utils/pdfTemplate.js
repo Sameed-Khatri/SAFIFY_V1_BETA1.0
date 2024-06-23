@@ -1,4 +1,4 @@
-const generatePdfTemplate = (data, logoBase64, currentDate) => {
+const generatePdfTemplate = (data, logoBase64, currentDate, reportPeriod) => {
     return {
         content: [
             {
@@ -10,6 +10,11 @@ const generatePdfTemplate = (data, logoBase64, currentDate) => {
                     },
                     {
                         text: currentDate,
+                        style: 'subheader',
+                        alignment: 'center'
+                    },
+                    {
+                        text: `Report Period: ${reportPeriod}`,
                         style: 'subheader',
                         alignment: 'center'
                     }
@@ -109,7 +114,7 @@ const generatePdfTemplate = (data, logoBase64, currentDate) => {
     };
 };
 
-const generateActionReportPdfTemplate = (data, logoBase64, currentDate) => {
+const generateActionReportPdfTemplate = (data, logoBase64, currentDate, reportPeriod) => {
     return {
         content: [
             {
@@ -121,6 +126,11 @@ const generateActionReportPdfTemplate = (data, logoBase64, currentDate) => {
                     },
                     {
                         text: currentDate,
+                        style: 'subheader',
+                        alignment: 'center'
+                    },
+                    {
+                        text: `Report Period: ${reportPeriod}`,
                         style: 'subheader',
                         alignment: 'center'
                     }
