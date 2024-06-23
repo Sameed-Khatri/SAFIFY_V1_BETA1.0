@@ -102,27 +102,34 @@ const fetchAllActionTeams = async (req, res) => {
 
 const InsertAssignTask = async (req, res) => {
     try {
-        const user_report_id=req.body.user_report_id;
-        const user_id=req.body.user_id;
-        const action_team_id=req.body.action_team_id;
-        const incident_criticality_id=req.body.incident_criticality_id;
+        const user_report_id = req.body.user_report_id;
+        const user_id = req.body.user_id;
+        const action_team_id = req.body.action_team_id;
+        const incident_criticality_id = req.body.incident_criticality_id;
+        const relevant_instructions = req.body.relevant_instructions;
+
         const messageTitle1 = 'New Report Assigned';
         const messageBody1 = `New incident report (report number: ${user_report_id}) has been assigned.`;
         const messageTitle2 = 'Report Assigned To Team';
         const messageBody2 = `Your incident report (report number: ${user_report_id}) has been assigned. Thank you for making the work place safer!`;
+        
         if (!user_report_id || !user_id || !incident_criticality_id || !action_team_id) {
             return res.status(400).json({ status: 'Bad Request', error: 'params incomplete' });
         }
+        
         const actionTeamUserID = await adminService.getActionTeamUserIDFromActionTeamID(action_team_id);
         console.log(actionTeamUserID);
-        const result = await adminService.InsertAssignTask(user_report_id, user_id, action_team_id, incident_criticality_id);
+        
+        const result = await adminService.InsertAssignTask(user_report_id, user_id, action_team_id, incident_criticality_id, relevant_instructions);
         if (result === 'DUPLICATE ENTRY') {
             return res.status(409).json({status: 'user report already assigned'});
         };
+
         const response1 = await helper.sendNotification(actionTeamUserID,messageTitle1,messageBody1);
         const response2 = await helper.sendNotification(user_id,messageTitle2,messageBody2);
         console.log(response1,response2);
         console.log(actionTeamUserID);
+        
         // set relevant cache keys to null since data is being changed
         const cacheKey1 = `userReports:${user_id}`;
         await redisOperation.delCache(cacheKey1);

@@ -39,9 +39,9 @@ const fetchAllActionTeams = async (deptID) => {
     }
 };
 
-const InsertAssignTask = async (user_report_id, user_id, action_team_id, incident_criticality_id) => {
+const InsertAssignTask = async (user_report_id, user_id, action_team_id, incident_criticality_id, relevant_instructions) => {
     try {
-        return await adminModel.InsertAssignTask(user_report_id, user_id, action_team_id, incident_criticality_id);
+        return await adminModel.InsertAssignTask(user_report_id, user_id, action_team_id, incident_criticality_id, relevant_instructions);
     } catch (error) {
         console.error('Error service inserting in assigned task: ', error);
         throw error;

@@ -44,10 +44,10 @@ const fetchAllActionTeams = async (deptID) => {
     }
 };
 
-const InsertAssignTask = async (user_report_id, user_id, action_team_id, incident_criticality_id) => {
+const InsertAssignTask = async (user_report_id, user_id, action_team_id, incident_criticality_id, relevant_instructions) => {
     try {
-        const query = `CALL InsertAssignTask(?,?,?,?)`;
-        const [results] = await db.query(query,[user_report_id, user_id, action_team_id, incident_criticality_id]);
+        const query = `CALL InsertAssignTask(?, ?, ?, ?, ?)`;
+        const [results] = await db.query(query,[user_report_id, user_id, action_team_id, incident_criticality_id, relevant_instructions]);
         console.log(results[0]);
         return results[0];
     } catch (error) {
