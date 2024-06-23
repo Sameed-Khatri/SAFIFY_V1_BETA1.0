@@ -288,8 +288,8 @@ const generatePdfWithPdfMake = async (docDefinition) => {
     });
 };
 
-const generatePdf = async (year = null, month = null, date = null) => {
-    const data = await pdfModel.GetUserReportsPDF(year, month, date);
+const generatePdf = async (year = null, month = null, day = null) => {
+    const data = await pdfModel.GetUserReportsPDF(year, month, day);
     const logoPath = path.resolve(__dirname, '../assets/Safify Logo Current.jpeg');
     const logoBase64 = await getBase64Image(logoPath);
     const currentDate = new Date().toLocaleString();
@@ -305,8 +305,8 @@ const generatePdf = async (year = null, month = null, date = null) => {
     return pdfBuffer;
 };
 
-const generateActionReportPdf = async (year = null, month = null, date = null) => {
-    const data = await pdfModel.fetchActionReportData(year, month, date);
+const generateActionReportPdf = async (year = null, month = null, day = null) => {
+    const data = await pdfModel.fetchActionReportData(year, month, day);
     const logoPath = path.resolve(__dirname, '../assets/Safify Logo Current.jpeg');
     const logoBase64 = await getBase64Image(logoPath);
     const currentDate = new Date().toLocaleString();
