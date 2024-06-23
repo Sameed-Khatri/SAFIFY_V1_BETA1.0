@@ -100,6 +100,31 @@ const fetchAllActionTeams = async (req, res) => {
     }
 };
 
+const fetchAllActionTeamsWithDepartments = async (req, res) => {
+    try {
+        // Check cache first
+        const cacheKey = `allActionTeamsWithDepartments:`;
+        const cachedData = await redisOperation.getCache(cacheKey);
+        if (cachedData) {
+            console.log('data found in redis cache: ');
+            return res.status(200).json(cachedData);
+        }
+
+        const actionTeams = await adminService.fetchAllActionTeamsWithDepartments();
+        if (actionTeams.length === 0) {
+            return res.status(404).json({ status: 'Not Found', error: 'No data found' });
+        }
+
+        // Set cache
+        console.log('setting data in redis cache');
+        await redisOperation.setCache(cacheKey, actionTeams);
+
+        return res.status(200).json(actionTeams);
+    } catch (error) {
+        return res.status(500).json({status: 'Internal server error', error: error.message });
+    }
+};
+
 const InsertAssignTask = async (req, res) => {
     try {
         const user_report_id = req.body.user_report_id;
@@ -322,5 +347,6 @@ module.exports = {
     DeleteUserReport,
     DeleteActionReport,
     ApproveActionReport,
-    createUser
+    createUser,
+    fetchAllActionTeamsWithDepartments
 };

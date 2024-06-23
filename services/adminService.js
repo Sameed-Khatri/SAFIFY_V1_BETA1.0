@@ -39,6 +39,15 @@ const fetchAllActionTeams = async (deptID) => {
     }
 };
 
+const fetchAllActionTeamsWithDepartments = async () => {
+    try {
+        return await adminModel.fetchAllActionTeamsWithDepartments();
+    } catch (error) {
+        console.error('Error service fetching action teams: ', error);
+        throw error;
+    }
+};
+
 const InsertAssignTask = async (user_report_id, user_id, action_team_id, incident_criticality_id, relevant_instructions) => {
     try {
         return await adminModel.InsertAssignTask(user_report_id, user_id, action_team_id, incident_criticality_id, relevant_instructions);
@@ -143,5 +152,6 @@ module.exports = {
     getUseridFromUserReportid,
     //updateUserPushNotification,
     getActionTeamUserIDFromActionTeamID,
-    createUser
+    createUser,
+    fetchAllActionTeamsWithDepartments
 };

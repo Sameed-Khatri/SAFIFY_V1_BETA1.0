@@ -44,6 +44,17 @@ const fetchAllActionTeams = async (deptID) => {
     }
 };
 
+const fetchAllActionTeamsWithDepartments = async () => {
+    try {
+        const query = `CALL GetAllActionTeamsWithDepartments()`;
+        const [results] = await db.query(query);
+        return results[0];
+    } catch (error) {
+        console.error('Error fetching action teams: ', error);
+        throw error;
+    }
+};
+
 const InsertAssignTask = async (user_report_id, user_id, action_team_id, incident_criticality_id, relevant_instructions) => {
     try {
         const query = `CALL InsertAssignTask(?, ?, ?, ?, ?)`;
@@ -188,5 +199,6 @@ module.exports = {
     getUseridFromUserReportid,
     //updateUserPushNotification,
     getActionTeamUserIDFromActionTeamID,
-    createUser
+    createUser,
+    fetchAllActionTeamsWithDepartments
 };
