@@ -17,6 +17,6 @@ router.post('/dashboard/approvedActionReport', authenticate.authenticateToken, a
 router.post('/dashboard/createUser', authenticate.authenticateToken, authenticate.authorizeRoles(role), adminController.createUser);
 router.get('/dashboard/generateUserReportPDF', authenticate.authenticateToken, authenticate.authorizeRoles(role), pdfController.generatePdfReport);
 // router.get('/dashboard/generateActionReportPDF', authenticate.authenticateToken, authenticate.authorizeRoles(role), pdfController.generateActionReportPdf);
-router.get('/dashboard/fetchAllActionTeamsWithDepartments', adminController.fetchAllActionTeamsWithDepartments);
+router.get('/dashboard/fetchAllActionTeamsWithDepartments', authenticate.authenticateToken, authenticate.authorizeRoles(role), adminController.fetchAllActionTeamsWithDepartments);
 
 module.exports = router;
