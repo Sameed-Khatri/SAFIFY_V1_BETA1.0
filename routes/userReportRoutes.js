@@ -16,6 +16,6 @@ router.get('/dashboard/fetchlocations', authenticate.authenticateToken, authenti
 router.get('/dashboard/fetchincidentType', authenticate.authenticateToken, authenticate.authorizeRoles(role), userReportController.fetchIncidentTypes);
 router.get('/dashboard/fetchincidentsubType', authenticate.authenticateToken, authenticate.authorizeRoles(role), userReportController.fetchIncidentSubTypes);
 router.get('/dashboard/getLocationsAndSubLocations', authenticate.authenticateToken, authenticate.authorizeRoles(role), userReportController.getLocationsAndSubLocations);
-router.get('/dashboard/getIncidetTypesAndIncidentSubTypes', authenticate.authenticateToken, authenticate.authorizeRoles(role), userReportController.getIncidetTypesAndIncidentSubTypes);
+router.get('/dashboard/getIncidentTypesAndIncidentSubTypes', authenticate.authenticateToken, authenticate.authorizeRoles(role), userReportController.getIncidetTypesAndIncidentSubTypes);
 
 module.exports = router;
