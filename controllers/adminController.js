@@ -338,6 +338,21 @@ const createUser = async (req, res) => {
     }
 };
 
+const generateAlert = async (req, res) => {
+    try {
+        const messageTitle = req.body.messageTitle;
+        const messageBody = req.body.messageBody;
+        const flagUserID = 'ALL';
+
+        const response = await helper.sendNotification(flagUserID, messageTitle, messageBody);
+        console.log(response);
+
+        return res.status(200).json({status: 'Alert sent'});
+    } catch (error) {
+        return res.status(500).json({status: 'Internal Server Error'});
+    }
+};
+
 module.exports = {
     fetchAllUserReports,
     fetchAllActionReports,
@@ -348,5 +363,6 @@ module.exports = {
     DeleteActionReport,
     ApproveActionReport,
     createUser,
-    fetchAllActionTeamsWithDepartments
+    fetchAllActionTeamsWithDepartments,
+    generateAlert
 };
