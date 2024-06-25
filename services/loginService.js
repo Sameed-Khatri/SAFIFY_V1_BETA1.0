@@ -15,6 +15,15 @@ const checkCredentials = async (user_id,user_pass,device_token) => {
             throw new Error('Incorrect User ID');
         };
         
+        if(userData.login_attempts === 0) {
+            const remainingTime = await loginModel.getRemainingTime(user_id);
+            if(remainingTime < 3) {
+                throw new Error(`Wait for ${3-remainingTime} minute(s) before attempting again`);
+            } else if (remainingTime >=3) {
+                await loginModel.updateLoginAttemptsAndTime(user_id, 0);
+            }
+        };
+
         const passwordHash = userData.user_pass;
         console.log('passowrd from frontend: ',user_pass);
         console.log('hashed password from DB: ',passwordHash);
@@ -22,6 +31,10 @@ const checkCredentials = async (user_id,user_pass,device_token) => {
         const ismatch = await passwordSecurity.verifyPassword(user_pass, passwordHash);
         console.log('passwords matched ? ',ismatch);
         if(!ismatch) {
+            const checkLoginAttempts = await loginModel.checkLoginAttempts(user_id);
+            if(checkLoginAttempts != 0) {
+                await loginModel.updateLoginAttemptsAndTime(user_id, 1);
+            };
             throw new Error('Wrong Password');
         };
 
@@ -33,6 +46,12 @@ const checkCredentials = async (user_id,user_pass,device_token) => {
 
         const affectedRows = await storeDeviceToken.pushTokenDB(userData.user_id, userData.role_name, device_token);
         console.log(affectedRows);
+
+        await loginModel.updateLoginAttemptsAndTime(user_id, 0);
+        // const remainingTime = await loginModel.getRemainingTime(user_id);
+        // if(remainingTime >= 3) {
+            
+        // };
 
         const token = jwt.sign({user_id: userData.user_id, role_name: userData.role_name, user_name: userData.user_name}, process.env.JWT_SECRET, { expiresIn: '24h' });
         console.log('token: '+ token);
