@@ -37,6 +37,88 @@ const makeUserReport = async (req, res) => {
     }
 };
 
+// const makeUserReport = async (req, res) => {
+//     try {
+//         const reportsArray = req.body.reports || null;
+//         const userId = req.params.userid;
+
+//         if (reportsArray) {
+//             for (let i = 0; i < reportsArray.length; i++) {
+//                 const report = reportsArray[i];
+//                 const file = req.files[i];
+
+//                 const reportData = {
+//                     report_description: report.report_description,
+//                     date_time: report.date_time,
+//                     incident_subtype_id: report.incident_subtype_id,
+//                     sub_location_id: report.sub_location_id,
+//                     incident_criticality_id: report.incident_criticality_id,
+//                     user_id: userId
+//                 };
+
+//                 const userReportID = await userReportService.makeUserReport(reportData, file);
+//                 console.log(userReportID);
+
+//                 const admins = await userReportService.getAdminUserID();
+//                 console.log(admins);
+
+//                 const messageTitle = 'New Incident Report Submitted';
+//                 const messageBody = `New incident report (report number: ${userReportID}) has been submitted.`;
+
+//                 for (const admin of admins) {
+//                     console.log(admin);
+//                     const response = await helper.sendNotification(admin.user_id, messageTitle, messageBody);
+//                     console.log(response);
+//                 }
+
+//                 const cacheKey1 = `userReports:${userId}`;
+//                 await redisOperation.delCache(cacheKey1);
+
+//                 const cacheKey2 = `userReportsAll`;
+//                 await redisOperation.delCache(cacheKey2);
+//             }
+
+//             return res.status(200).json({ status: 'reports submitted' });
+//         } else {
+//             const reportData = {
+//                 report_description: req.body.report_description,
+//                 date_time: req.body.date_time,
+//                 incident_subtype_id: req.body.incident_subtype_id,
+//                 sub_location_id: req.body.sub_location_id,
+//                 incident_criticality_id: req.body.incident_criticality_id,
+//                 user_id: userId
+//             };
+
+//             const userReportID = await userReportService.makeUserReport(reportData, req.file);
+//             console.log(userReportID);
+
+//             const admins = await userReportService.getAdminUserID();
+//             console.log(admins);
+
+//             const messageTitle = 'New Incident Report Submitted';
+//             const messageBody = `New incident report (report number: ${userReportID}) has been submitted.`;
+
+//             for (const admin of admins) {
+//                 console.log(admin);
+//                 const response = await helper.sendNotification(admin.user_id, messageTitle, messageBody);
+//                 console.log(response);
+//             }
+
+//             const cacheKey1 = `userReports:${userId}`;
+//             await redisOperation.delCache(cacheKey1);
+
+//             const cacheKey2 = `userReportsAll`;
+//             await redisOperation.delCache(cacheKey2);
+
+//             return res.status(200).json({ status: 'report submitted' });
+//         }
+//     } catch (error) {
+//         console.log(error);
+//         return res.status(500).json({ status: 'error inserting' });
+//     }
+// };
+
+
 const fetchUserReports = async (req, res) => {
     try {
         const user_id = req.params.userid;

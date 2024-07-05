@@ -1,5 +1,6 @@
 const passwordHashDB = require('../Helper/hashPasswordsDB');
 const revert = require('../Helper/revertPushNotification');
+const sendNotification = require('../Helper/generateNotifications');
 
 const updatePasswords = async (req, res) => {
     try {
@@ -26,7 +27,20 @@ const revertPushNotification = async (req, res) => {
     }
 };
 
+const sendDummyNotification = async (req, res) => {
+    try {
+        messageTitle = 'Dummy Notification';
+        messageBody = 'Dummy';
+        const response = await sendNotification.sendNotification(req.body.user_id, messageTitle, messageBody);
+        console.log(response);
+        return res.status(200).json({status: 'dummy notification sent'});
+    } catch (error) {
+        return res.status(500).json({status: 'Internal Server Error', error: error.message});
+    }
+};
+
 module.exports = {
     updatePasswords,
-    revertPushNotification
+    revertPushNotification,
+    sendDummyNotification
 };

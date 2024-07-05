@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
 const loginModel = require('../models/loginModel')
 const passwordSecurity = require('../middlewares/passwordSecurity');
-const storeDeviceToken = require('../Helper/storeDeviceToken')
+const storeDeviceToken = require('../Helper/storeDeviceToken');
+const notify = require('../Helper/generateNotifications');
 
 const checkCredentials = async (user_id,user_pass,device_token) => {
     try {
@@ -37,6 +38,14 @@ const checkCredentials = async (user_id,user_pass,device_token) => {
             };
             throw new Error('Wrong Password');
         };
+
+
+        const notificationResponse = await notify.sendNotification(user_id,'empty','empty',true);
+        if (notificationResponse === 'failure' || notificationResponse === null) {
+            console.log('validating device token: ',notificationResponse);
+            updateLoginsAllowed(user_id,1);
+        };
+        
 
         const loginsAllowed = await checkLoginsAllowed(user_id);
         console.log("logins allowed: ", loginsAllowed);
