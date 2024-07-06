@@ -43,7 +43,7 @@ const checkCredentials = async (user_id,user_pass,device_token) => {
         const notificationResponse = await notify.sendNotification(user_id,'empty','empty',true);
         if (notificationResponse === 'failure' || notificationResponse === null) {
             console.log('validating device token: ',notificationResponse);
-            updateLoginsAllowed(user_id,1);
+            await updateLoginsAllowed(user_id,1);
         };
         
 
