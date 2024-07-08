@@ -138,6 +138,48 @@ const createUser = async (user_id, user_pass, role_name, user_name, department_i
     }
 };
 
+const addLocationOrSubLocation = async (location_name, sub_location_name, location_id) => {
+    try {
+        let flag;
+
+        if (location_name && !sub_location_name && !location_id) {
+            flag = 0;
+        } else if (!location_name && sub_location_name && location_id) {
+            flag = 1;
+        } else {
+            throw new Error('Invalid Parameters');
+        }
+
+        const response = await adminModel.addLocationOrSubLocation(flag, location_name, sub_location_name, location_id);
+        
+        return response;
+    } catch (error) {
+        console.error('Error service add location or sub location: ', error);
+        throw error;
+    }
+};
+
+const addIncidentTypeOrSubType = async (incident_type_description, incident_subtype_description, incident_type_id) => {
+    try {
+        let flag;
+
+        if (incident_type_description && !incident_subtype_description && !incident_type_id) {
+            flag = 0;
+        } else if (!incident_type_description && incident_subtype_description && incident_type_id) {
+            flag = 1;
+        } else {
+            throw new Error('Invalid Parameters');
+        }
+
+        const response = await adminModel.addIncidentTypeOrSubType(flag, incident_type_description, incident_subtype_description, incident_type_id);
+        
+        return response;
+    } catch (error) {
+        console.error('Error service add incident type or sub type: ', error);
+        throw error;
+    }
+};
+
 module.exports = {
     fetchAllUserReports,
     fetchAllActionReports,
@@ -153,5 +195,7 @@ module.exports = {
     //updateUserPushNotification,
     getActionTeamUserIDFromActionTeamID,
     createUser,
-    fetchAllActionTeamsWithDepartments
+    fetchAllActionTeamsWithDepartments,
+    addLocationOrSubLocation,
+    addIncidentTypeOrSubType
 };

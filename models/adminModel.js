@@ -185,6 +185,29 @@ const createUser = async (user_id, user_pass, role_name, user_name, department_i
     }
 };
 
+const addLocationOrSubLocation = async (flag, location_name, sub_location_name, location_id) => {
+    try {
+        const query = `CALL addLocationOrSubLocation(?, ?, ?, ?)`;
+        const result = await db.query(query, [flag, location_name, sub_location_name, location_id]);
+        console.log(result);
+        return result;
+    } catch (error) {
+        console.error('Error model add location or sub location: ', error);
+        throw error;
+    }
+};
+
+const addIncidentTypeOrSubType = async (flag, incident_type_description, incident_subtype_description, incident_type_id) => {
+    try {
+        const query = `CALL addIncidentTypeOrSubType(?, ?, ?, ?)`;
+        const result = await db.query(query, [flag, incident_type_description, incident_subtype_description, incident_type_id]);
+        console.log(result);
+    } catch (error) {
+        console.error('Error model add incident type or sub type: ', error);
+        throw error;
+    }
+};
+
 module.exports = {
     fetchAllUserReports,
     fetchAllActionReports,
@@ -200,5 +223,7 @@ module.exports = {
     //updateUserPushNotification,
     getActionTeamUserIDFromActionTeamID,
     createUser,
-    fetchAllActionTeamsWithDepartments
+    fetchAllActionTeamsWithDepartments,
+    addLocationOrSubLocation,
+    addIncidentTypeOrSubType
 };

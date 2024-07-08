@@ -54,11 +54,21 @@ const fetchEfficiency = async (req, res) => {
     }
 };
 
+const fetchAllAnalytics = async (req, res) => {
+    try {
+        const result = await analyticsService.fetchAllAnalytics();
+        return res.status(200).json(result);
+    } catch (error) {
+        return res.status(500).json({ status: 'Internal server error', error: error.message });
+    }
+};
+
 module.exports = {
     fetchIncidentsReported,
     fetchIncidentsResolved,
     fetchTotalIncidentsOnTypes,
     fetchTotalIncidentsOnSubTypes,
     fetchTotalIncidentsOnLocations,
-    fetchEfficiency
+    fetchEfficiency,
+    fetchAllAnalytics
 };

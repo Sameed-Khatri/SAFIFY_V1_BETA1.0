@@ -11,5 +11,6 @@ router.get('/fetchTotalIncidentsOnTypes', authenticate.authenticateToken, authen
 router.get('/fetchTotalIncidentsOnSubTypes', authenticate.authenticateToken, authenticate.authorizeRoles(role), analyticsController.fetchTotalIncidentsOnSubTypes);
 router.get('/fetchTotalIncidentsOnLocations', authenticate.authenticateToken, authenticate.authorizeRoles(role), analyticsController.fetchTotalIncidentsOnLocations);
 router.get('/fetchEfficiency', authenticate.authenticateToken, authenticate.authorizeRoles(role), analyticsController.fetchEfficiency);
+router.get('/fetchAllAnalytics', authenticate.authenticateToken, authenticate.authorizeRoles(role), analyticsController.fetchAllAnalytics);
 
 module.exports = router;

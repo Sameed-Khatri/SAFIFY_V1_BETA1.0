@@ -76,11 +76,37 @@ const fetchEfficiency = async () => {
     }
 };
 
+const fetchAllAnalytics = async () => {
+    try {
+        const incidentsReported = await fetchIncidentsReported();
+        const incidentsResolved = await fetchIncidentsResolved();
+        const totalIncidentsOnTypes = await fetchTotalIncidentsOnTypes();
+        const totalIncidentsOnSubTypes = await fetchTotalIncidentsOnSubTypes();
+        const totalIncidentsOnLocations = await fetchTotalIncidentsOnLocations();
+        const efficiency = await fetchEfficiency();
+        
+        const response = {
+            incidentsReported,
+            incidentsResolved,
+            totalIncidentsOnTypes,
+            totalIncidentsOnSubTypes,
+            totalIncidentsOnLocations,
+            efficiency
+        };
+        
+        return response;
+    } catch (error) {
+        console.error('Error service fetching all analytics: ', error);
+        throw error;
+    }
+};
+
 module.exports = {
     fetchIncidentsReported,
     fetchIncidentsResolved,
     fetchTotalIncidentsOnTypes,
     fetchTotalIncidentsOnSubTypes,
     fetchTotalIncidentsOnLocations,
-    fetchEfficiency
+    fetchEfficiency,
+    fetchAllAnalytics
 };

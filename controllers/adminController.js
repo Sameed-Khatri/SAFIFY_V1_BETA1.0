@@ -353,6 +353,74 @@ const generateAlert = async (req, res) => {
     }
 };
 
+const addLocationOrSubLocation = async (req, res) => {
+    try {
+        const location_name = req.body.location_name;
+        const sub_location_name = req.body.sub_location_name;
+        const location_id = req.body.location_id;
+        
+        const flagUserID = 'ALL';
+        let messageTitle;
+        let messageBody;
+
+        if (location_name && !sub_location_name && !location_id) {
+            messageTitle = 'New Location';
+            messageBody = 'New Location Has Been Added';
+        } else if (!location_name && sub_location_name && location_id) {
+            messageTitle = 'New Sub Location';
+            messageBody = 'New Sub Location Has Been Added';
+        } else {
+            throw new Error('Invalid Parameters');
+        }
+
+        const response = await adminService.addLocationOrSubLocation(location_name, sub_location_name, location_id);
+        console.log(response);
+
+        await helper.sendNotification(flagUserID, messageTitle, messageBody, true);
+
+        const cacheKey = `LocationsAndSubLocations:`;
+        await redisOperation.delCache(cacheKey);
+        
+        return res.status(200).json({status: 'New Location / Sub Location Added Successfully'});
+    } catch (error) {
+        return res.status(500).json({status: 'Internal Server Error', error: error.message});
+    }
+};
+
+const addIncidentTypeOrSubType = async (req, res) => {
+    try {
+        const incident_type_description = req.body.incident_type_description;
+        const incident_subtype_description = req.body.incident_subtype_description;
+        const incident_type_id = req.body.incident_type_id;
+        
+        const flagUserID = 'ALL';
+        let messageTitle;
+        let messageBody;
+
+        if (incident_type_description && !incident_subtype_description && !incident_type_id) {
+            messageTitle = 'New Incident Type';
+            messageBody = 'New Incident Type Has Been Added';
+        } else if (!incident_type_description && incident_subtype_description && incident_type_id) {
+            messageTitle = 'New Incident Sub Type';
+            messageBody = 'New Incident Sub Type Has Been Added';
+        } else {
+            throw new Error('Invalid Parameters');
+        }
+
+        const response = await adminService.addIncidentTypeOrSubType(incident_type_description, incident_subtype_description, incident_type_id);
+        console.log(response);
+
+        await helper.sendNotification(flagUserID, messageTitle, messageBody, true);
+        
+        const cacheKey = `IncidetTypesAndIncidentSubTypes:`;
+        await redisOperation.delCache(cacheKey);
+        
+        return res.status(200).json({status: 'New Incident Type / Sub Type Added Successfully'});
+    } catch (error) {
+        return res.status(500).json({status: 'Internal Server Error', error: error.message});
+    }
+};
+
 module.exports = {
     fetchAllUserReports,
     fetchAllActionReports,
@@ -364,5 +432,7 @@ module.exports = {
     ApproveActionReport,
     createUser,
     fetchAllActionTeamsWithDepartments,
-    generateAlert
+    generateAlert,
+    addLocationOrSubLocation,
+    addIncidentTypeOrSubType
 };
