@@ -21,6 +21,8 @@ router.get('/dashboard/fetchAllActionTeamsWithDepartments', authenticate.authent
 router.post('/dashboard/alertUsers', authenticate.authenticateToken, authenticate.authorizeRoles(role), adminController.generateAlert);
 router.post('/dashboard/addLocationOrSubLocation', authenticate.authenticateToken, authenticate.authorizeRoles(role), adminController.addLocationOrSubLocation);
 router.post('/dashboard/addIncidentTypeOrSubType', authenticate.authenticateToken, authenticate.authorizeRoles(role), adminController.addIncidentTypeOrSubType);
+router.get('/dashboard/getLocationsAndSubLocations', authenticate.authenticateToken, authenticate.authorizeRoles(role), adminController.getLocationsAndSubLocations);
+router.get('/dashboard/getIncidentTypesAndIncidentSubTypes', authenticate.authenticateToken, authenticate.authorizeRoles(role), adminController.getIncidetTypesAndIncidentSubTypes);
 
 
 module.exports = router;
