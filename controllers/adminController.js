@@ -378,8 +378,10 @@ const addLocationOrSubLocation = async (req, res) => {
 
         await helper.sendNotification(flagUserID, messageTitle, messageBody, true);
 
+        
         const cacheKey = `LocationsAndSubLocations:`;
         await redisOperation.delCache(cacheKey);
+        console.log(`deleting cache: ${cacheKey}`);
         
         return res.status(200).json({status: 'New Location / Sub Location Added Successfully'});
     } catch (error) {
@@ -421,6 +423,8 @@ const addIncidentTypeOrSubType = async (req, res) => {
     }
 };
 
+
+// made these generic
 const getLocationsAndSubLocations = async (req, res) => {
     try {
         // Check cache first

@@ -235,6 +235,7 @@ const fetchIncidentSubTypes = async (req, res) => {
     }
 };
 
+// made these generic
 const getLocationsAndSubLocations = async (req, res) => {
     try {
         // Check cache first

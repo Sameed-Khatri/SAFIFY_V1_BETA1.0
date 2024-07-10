@@ -1,6 +1,8 @@
 const passwordHashDB = require('../Helper/hashPasswordsDB');
 const revert = require('../Helper/revertPushNotification');
 const sendNotification = require('../Helper/generateNotifications');
+const helperService = require('../services/helperService');
+const redisOperation = require('../middlewares/redisOperation');
 
 const updatePasswords = async (req, res) => {
     try {
@@ -39,8 +41,54 @@ const sendDummyNotification = async (req, res) => {
     }
 };
 
+const getLocationsAndSubLocations = async (req, res) => {
+    try {
+        // Check cache first
+        const cacheKey = `LocationsAndSubLocations:`;
+        const cachedData = await redisOperation.getCache(cacheKey);
+        if (cachedData) {
+            console.log('data found in redis cache: ');
+            return res.status(200).json(cachedData);
+        }
+
+        const result = await helperService.getLocationsAndSubLocations();
+
+        // Set cache
+        console.log('setting data in redis cache');
+        await redisOperation.setCache(cacheKey, result);
+
+        return res.status(200).json(result);
+    } catch (error) {
+        return res.status(500).json({ status: 'Internal server error', error: error.message });
+    }
+};
+
+const getIncidetTypesAndIncidentSubTypes = async (req, res) => {
+    try {
+        // Check cache first
+        const cacheKey = `IncidetTypesAndIncidentSubTypes:`;
+        const cachedData = await redisOperation.getCache(cacheKey);
+        if (cachedData) {
+            console.log('data found in redis cache: ');
+            return res.status(200).json(cachedData);
+        }
+
+        const result = await helperService.getIncidetTypesAndIncidentSubTypes();
+        
+        // Set cache
+        console.log('setting data in redis cache');
+        await redisOperation.setCache(cacheKey, result);
+        
+        return res.status(200).json(result);
+    } catch (error) {
+        return res.status(500).json({ status: 'Internal server error', error: error.message });
+    }
+};
+
 module.exports = {
     updatePasswords,
     revertPushNotification,
-    sendDummyNotification
+    sendDummyNotification,
+    getLocationsAndSubLocations,
+    getIncidetTypesAndIncidentSubTypes
 };
