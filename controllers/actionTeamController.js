@@ -1,6 +1,6 @@
 const actionTeamService = require('../services/actionTeamService');
 const helper = require('../Helper/generateNotifications');
-const redisOperation = require('../middlewares/redisOperation');
+// const redisOperation = require('../middlewares/redisOperation');
 
 const MakeActionReport = async (req,res) => {
     try {
@@ -30,11 +30,11 @@ const MakeActionReport = async (req,res) => {
             console.log(response);
         };
 
-        const cacheKey1 = `actionReportsAll`;
-        await redisOperation.delCache(cacheKey1);
+        // const cacheKey1 = `actionReportsAll`;
+        // await redisOperation.delCache(cacheKey1);
 
-        const cacheKey2 = `assignedTasksActionTeam:${req.params.userid}`;
-        await redisOperation.delCache(cacheKey2);
+        // const cacheKey2 = `assignedTasksActionTeam:${req.params.userid}`;
+        // await redisOperation.delCache(cacheKey2);
 
         return res.status(200).json({status: 'report submitted'});
     } catch (error) {
@@ -48,18 +48,18 @@ const FetchAssignedTasks = async (req, res) => {
         const action_team_id = req.params.userid;
 
         // Check cache first
-        const cacheKey = `assignedTasksActionTeam:${action_team_id}`;
-        const cachedData = await redisOperation.getCache(cacheKey);
-        if (cachedData) {
-            console.log('data found in redis cache: ');
-            return res.status(200).json(cachedData);
-        }
+        // const cacheKey = `assignedTasksActionTeam:${action_team_id}`;
+        // const cachedData = await redisOperation.getCache(cacheKey);
+        // if (cachedData) {
+        //     console.log('data found in redis cache: ');
+        //     return res.status(200).json(cachedData);
+        // }
 
         const result = await actionTeamService.FetchAssignedTasks(action_team_id);
 
         // Set cache
-        console.log('setting data in redis cache');
-        await redisOperation.setCache(cacheKey, result);
+        // console.log('setting data in redis cache');
+        // await redisOperation.setCache(cacheKey, result);
 
         return res.status(200).json(result);
     } catch (error) {

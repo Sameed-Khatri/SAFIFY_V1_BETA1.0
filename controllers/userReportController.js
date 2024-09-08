@@ -1,6 +1,6 @@
 const userReportService = require('../services/userReportService');
 const helper = require('../Helper/generateNotifications');
-const redisOperation = require('../middlewares/redisOperation');
+// const redisOperation = require('../middlewares/redisOperation');
 
 const makeUserReport = async (req, res) => {
     try {
@@ -24,11 +24,11 @@ const makeUserReport = async (req, res) => {
             console.log(response);
         };
 
-        const cacheKey1 = `userReports:${req.params.userid}`;
-        await redisOperation.delCache(cacheKey1);
+        // const cacheKey1 = `userReports:${req.params.userid}`;
+        // await redisOperation.delCache(cacheKey1);
 
-        const cacheKey2 = `userReportsAll`;
-        await redisOperation.delCache(cacheKey2);
+        // const cacheKey2 = `userReportsAll`;
+        // await redisOperation.delCache(cacheKey2);
 
         return res.status(200).json({status: 'report submitted'});
     } catch (error) {
@@ -124,18 +124,18 @@ const fetchUserReports = async (req, res) => {
         const user_id = req.params.userid;
 
         // Check cache first
-        const cacheKey = `userReports:${user_id}`;
-        const cachedData = await redisOperation.getCache(cacheKey);
-        if (cachedData) {
-            console.log('data found in redis cache: ');
-            return res.status(200).json(cachedData);
-        }
+        // const cacheKey = `userReports:${user_id}`;
+        // const cachedData = await redisOperation.getCache(cacheKey);
+        // if (cachedData) {
+        //     console.log('data found in redis cache: ');
+        //     return res.status(200).json(cachedData);
+        // }
 
         const reports = await userReportService.fetchUserReports(user_id);
 
         // Set cache
-        console.log('setting data in redis cache');
-        await redisOperation.setCache(cacheKey, reports);
+        // console.log('setting data in redis cache');
+        // await redisOperation.setCache(cacheKey, reports);
 
         return res.status(200).json(reports);
     } catch (error) {
@@ -148,18 +148,18 @@ const fetchSubLocations = async (req, res) => {
         const location_id = req.query.location_id;
 
         // Check cache first
-        const cacheKey = `subLocations:${location_id}`;
-        const cachedData = await redisOperation.getCache(cacheKey);
-        if (cachedData) {
-            console.log('data found in redis cache: ');
-            return res.status(200).json(cachedData);
-        }
+        // const cacheKey = `subLocations:${location_id}`;
+        // const cachedData = await redisOperation.getCache(cacheKey);
+        // if (cachedData) {
+        //     console.log('data found in redis cache: ');
+        //     return res.status(200).json(cachedData);
+        // }
 
         const subLocations = await userReportService.fetchSubLocations(location_id);
 
         // Set cache
-        console.log('setting data in redis cache');
-        await redisOperation.setCache(cacheKey, subLocations);
+        // console.log('setting data in redis cache');
+        // await redisOperation.setCache(cacheKey, subLocations);
 
         return res.status(200).json(subLocations);
     } catch (error) {
@@ -170,18 +170,18 @@ const fetchSubLocations = async (req, res) => {
 const fetchLocations = async (req, res) => {
     try {
         // Check cache first
-        const cacheKey = `locations`;
-        const cachedData = await redisOperation.getCache(cacheKey);
-        if (cachedData) {
-            console.log('data found in redis cache: ');
-            return res.status(200).json(cachedData);
-        }
+        // const cacheKey = `locations`;
+        // const cachedData = await redisOperation.getCache(cacheKey);
+        // if (cachedData) {
+        //     console.log('data found in redis cache: ');
+        //     return res.status(200).json(cachedData);
+        // }
 
         const locations = await userReportService.fetchLocations();
 
         // Set cache
-        console.log('setting data in redis cache');
-        await redisOperation.setCache(cacheKey, locations);
+        // console.log('setting data in redis cache');
+        // await redisOperation.setCache(cacheKey, locations);
 
         return res.status(200).json(locations);
     } catch (error) {
@@ -192,18 +192,18 @@ const fetchLocations = async (req, res) => {
 const fetchIncidentTypes = async (req, res) => {
     try {
         // Check cache first
-        const cacheKey = `incidentTypes`;
-        const cachedData = await redisOperation.getCache(cacheKey);
-        if (cachedData) {
-            console.log('data found in redis cache: ');
-            return res.status(200).json(cachedData);
-        }
+        // const cacheKey = `incidentTypes`;
+        // const cachedData = await redisOperation.getCache(cacheKey);
+        // if (cachedData) {
+        //     console.log('data found in redis cache: ');
+        //     return res.status(200).json(cachedData);
+        // }
 
         const incidentTypes = await userReportService.fetchIncidentTypes();
 
         // Set cache
-        console.log('setting data in redis cache');
-        await redisOperation.setCache(cacheKey, incidentTypes);
+        // console.log('setting data in redis cache');
+        // await redisOperation.setCache(cacheKey, incidentTypes);
 
         return res.status(200).json(incidentTypes);
     } catch (error) {
@@ -216,18 +216,18 @@ const fetchIncidentSubTypes = async (req, res) => {
         const incident_type_id=req.query.incident_type_id;
 
         // Check cache first
-        const cacheKey = `incidentSubTypes:${incident_type_id}`;
-        const cachedData = await redisOperation.getCache(cacheKey);
-        if (cachedData) {
-            console.log('data found in redis cache: ');
-            return res.status(200).json(cachedData);
-        }
+        // const cacheKey = `incidentSubTypes:${incident_type_id}`;
+        // const cachedData = await redisOperation.getCache(cacheKey);
+        // if (cachedData) {
+        //     console.log('data found in redis cache: ');
+        //     return res.status(200).json(cachedData);
+        // }
 
         const incidentSubTypes = await userReportService.fetchIncidentSubTypes(incident_type_id);
 
         // Set cache
-        console.log('setting data in redis cache');
-        await redisOperation.setCache(cacheKey, incidentSubTypes);
+        // console.log('setting data in redis cache');
+        // await redisOperation.setCache(cacheKey, incidentSubTypes);
         
         return res.status(200).json(incidentSubTypes);
     } catch (error) {
@@ -239,18 +239,18 @@ const fetchIncidentSubTypes = async (req, res) => {
 const getLocationsAndSubLocations = async (req, res) => {
     try {
         // Check cache first
-        const cacheKey = `LocationsAndSubLocations:`;
-        const cachedData = await redisOperation.getCache(cacheKey);
-        if (cachedData) {
-            console.log('data found in redis cache: ');
-            return res.status(200).json(cachedData);
-        }
+        // const cacheKey = `LocationsAndSubLocations:`;
+        // const cachedData = await redisOperation.getCache(cacheKey);
+        // if (cachedData) {
+        //     console.log('data found in redis cache: ');
+        //     return res.status(200).json(cachedData);
+        // }
 
         const result = await userReportService.getLocationsAndSubLocations();
 
         // Set cache
-        console.log('setting data in redis cache');
-        await redisOperation.setCache(cacheKey, result);
+        // console.log('setting data in redis cache');
+        // await redisOperation.setCache(cacheKey, result);
 
         return res.status(200).json(result);
     } catch (error) {
@@ -261,18 +261,18 @@ const getLocationsAndSubLocations = async (req, res) => {
 const getIncidetTypesAndIncidentSubTypes = async (req, res) => {
     try {
         // Check cache first
-        const cacheKey = `IncidetTypesAndIncidentSubTypes:`;
-        const cachedData = await redisOperation.getCache(cacheKey);
-        if (cachedData) {
-            console.log('data found in redis cache: ');
-            return res.status(200).json(cachedData);
-        }
+        // const cacheKey = `IncidetTypesAndIncidentSubTypes:`;
+        // const cachedData = await redisOperation.getCache(cacheKey);
+        // if (cachedData) {
+        //     console.log('data found in redis cache: ');
+        //     return res.status(200).json(cachedData);
+        // }
 
         const result = await userReportService.getIncidetTypesAndIncidentSubTypes();
         
         // Set cache
-        console.log('setting data in redis cache');
-        await redisOperation.setCache(cacheKey, result);
+        // console.log('setting data in redis cache');
+        // await redisOperation.setCache(cacheKey, result);
         
         return res.status(200).json(result);
     } catch (error) {
