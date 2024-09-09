@@ -210,7 +210,7 @@ const DeleteUserReport = async (req, res) => {
         
         return res.status(200).json({status: 'deleted user report'});
     } catch (error) {
-        return res.status(500).json({status: 'Internal Server Error'});
+        return res.status(500).json({status: 'Internal Server Error', error: error.message});
     }
 };
 
@@ -260,7 +260,7 @@ const DeleteActionReport = async (req, res) => {
         return res.status(200).json({status: 'deleted action report'});
     } catch (error) {
         console.log(error);
-        return res.status(500).json({status: 'Internal Server Error'});
+        return res.status(500).json({status: 'Internal Server Error', error: error.message});
     }
 };
 
@@ -314,7 +314,7 @@ const ApproveActionReport = async (req, res) => {
         return res.status(200).json({status: 'action report approved'});
     } catch (error) {
         console.log(error.message);
-        return res.status(500).json({status: 'Internal Server Error'});
+        return res.status(500).json({status: 'Internal Server Error', error: error.message});
     }
 };
 
@@ -333,7 +333,7 @@ const createUser = async (req, res) => {
         console.log(result);
         return res.status(200).json({status: 'user created successfully'});
     } catch (error) {
-        return res.status(500).json({status: 'Internal Server Error'});
+        return res.status(500).json({status: 'Internal Server Error', error: error.message});
     }
 };
 
@@ -348,7 +348,7 @@ const generateAlert = async (req, res) => {
 
         return res.status(200).json({status: 'Alert sent'});
     } catch (error) {
-        return res.status(500).json({status: 'Internal Server Error'});
+        return res.status(500).json({status: 'Internal Server Error', error: error.message});
     }
 };
 

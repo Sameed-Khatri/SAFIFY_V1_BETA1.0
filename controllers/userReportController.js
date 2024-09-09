@@ -33,7 +33,7 @@ const makeUserReport = async (req, res) => {
         return res.status(200).json({status: 'report submitted'});
     } catch (error) {
         console.log(error);
-        return res.status(500).json({status: 'error inserting'});
+        return res.status(500).json({status: 'error inserting', error: error.message});
     }
 };
 

@@ -39,7 +39,7 @@ const MakeActionReport = async (req,res) => {
         return res.status(200).json({status: 'report submitted'});
     } catch (error) {
         console.log(error);
-        return res.status(500).json({status: 'error inserting'});
+        return res.status(500).json({status: 'error inserting', error: error.message});
     }
 };
 
@@ -63,7 +63,7 @@ const FetchAssignedTasks = async (req, res) => {
 
         return res.status(200).json(result);
     } catch (error) {
-        return res.status(500).json({ status: 'Internal server error' });
+        return res.status(500).json({ status: 'Internal server error', error: error.message });
     }
 };
 

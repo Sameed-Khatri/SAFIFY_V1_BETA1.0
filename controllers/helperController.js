@@ -25,7 +25,7 @@ const revertPushNotification = async (req, res) => {
         }
         return res.status(200).json({status: 'reverted push notification updates'});
     } catch (error) {
-        return res.status(500).json({status: 'Internal Server Error'});
+        return res.status(500).json({status: 'Internal Server Error', error: error.message});
     }
 };
 
