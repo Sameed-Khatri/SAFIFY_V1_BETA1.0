@@ -177,11 +177,21 @@ const sendNotification = async (user_id, messageTitle, messageBody, silent = fal
             return response;
         } else {
             const messages = deviceTokens.map(createMessage);
-
-            console.log('Sending messages:', messages);
-            const response = await firebase.messaging().sendAll(messages);
-            console.log('Successfully sent messages:', response);
-            return response;
+        
+            console.log('Sending messages individually:');
+            const responses = [];
+            for (const message of messages) {
+                try {
+                    const response = await firebase.messaging().send(message);
+                    console.log('Successfully sent message:', response);
+                    responses.push({ success: true, response });
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                    responses.push({ success: false, error });
+                }
+            }
+        
+            return responses;
         }
     } catch (error) {
         console.error('Error sending notification: ', error);
