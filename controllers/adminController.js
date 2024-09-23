@@ -326,7 +326,11 @@ const createUser = async (req, res) => {
         const user_name = req.body.user_name;
         let department_id = null;
         if (role_name === 'action_team') {
-            department_id = req.body.department_id;
+            if (req.body.department_id) {
+                department_id = req.body.department_id;
+            } else {
+                department_id = 'D1';
+            };
         };
         const hashedPassword = await middleware.hashPassword(unhashedPassword);
         const result = await adminService.createUser(user_id, hashedPassword, role_name, user_name, department_id);
