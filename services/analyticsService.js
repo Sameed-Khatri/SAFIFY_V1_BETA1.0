@@ -101,6 +101,15 @@ const fetchAllAnalytics = async () => {
     }
 };
 
+const fetchUserMetrics = async () => {
+    try {
+        return await analyticsModel.fetchUserMetrics();
+    } catch (error) {
+        console.error('Error service fetching user metrics: ', error);
+        throw error;
+    }
+};
+
 module.exports = {
     fetchIncidentsReported,
     fetchIncidentsResolved,
@@ -108,5 +117,6 @@ module.exports = {
     fetchTotalIncidentsOnSubTypes,
     fetchTotalIncidentsOnLocations,
     fetchEfficiency,
-    fetchAllAnalytics
+    fetchAllAnalytics,
+    fetchUserMetrics
 };

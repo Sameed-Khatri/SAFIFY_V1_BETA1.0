@@ -68,11 +68,23 @@ const fetchEfficiency = async () => {
     }
 };
 
+const fetchUserMetrics = async () => {
+    try {
+        const query = `CALL getUserMetrics()`;
+        const result = await db.query(query);
+        return result[0][0];
+    } catch (error) {
+        console.error('Error model fetching user metrics: ', error);
+        throw error;
+    }
+};
+
 module.exports = {
     fetchIncidentsReported,
     fetchIncidentsResolved,
     fetchTotalIncidentsOnTypes,
     fetchTotalIncidentsOnSubTypes,
     fetchTotalIncidentsOnLocations,
-    fetchEfficiency
+    fetchEfficiency,
+    fetchUserMetrics
 };
