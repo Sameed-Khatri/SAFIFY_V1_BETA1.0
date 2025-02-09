@@ -147,6 +147,29 @@ const deleteUser = async (user) => {
     }
 };
 
+const updateUser = async (user) => {
+    try {
+        return await adminModel.updateUser(user);
+    } catch (error) {
+        console.error('Error service updating user: ', error);
+        throw error;
+    }
+};
+
+const updateUserID = async (user) => {
+    try {
+        const validation = await validateUserIdDomain(user.user_id_new);
+        if (validation === false) {
+            throw new Error('Invalid User ID');
+        } else {
+            return await adminModel.updateUserID([user.user_id_old, user.user_id_new]);
+        };
+    } catch (error) {
+        console.error('Error service updating user ID: ', error);
+        throw error;
+    }
+};
+
 const addLocationOrSubLocation = async (location_name, sub_location_name, location_id) => {
     try {
         let flag;
@@ -271,6 +294,8 @@ module.exports = {
     getActionTeamUserIDFromActionTeamID,
     createUser,
     deleteUser,
+    updateUser,
+    updateUserID,
     fetchAllActionTeamsWithDepartments,
     addLocationOrSubLocation,
     addIncidentTypeOrSubType,

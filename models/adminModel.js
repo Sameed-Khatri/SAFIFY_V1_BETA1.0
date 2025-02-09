@@ -200,7 +200,41 @@ const deleteUser = async (user) => {
 
         throw error;
     }
-}
+};
+
+const updateUser = async (user) => {
+    try {
+        const query = `CALL updateUser(?, ?, ?)`;
+        const result = await db.query(query, user);
+        console.log(result);
+        return result;
+    } catch (error) {
+        console.error('Error model updating user: ', error);
+
+        if (error.sqlState === '45000') {
+            throw new Error(error.sqlMessage);
+        };
+        
+        throw error;
+    }
+};
+
+const updateUserID = async (user) => {
+    try {
+        const query = `CALL updateUserID(?, ?)`;
+        const result = await db.query(query, user);
+        console.log(result);
+        return result;
+    } catch (error) {
+        console.error('Error model updating user ID: ', error);
+
+        if (error.sqlState === '45000') {
+            throw new Error(error.sqlMessage);
+        };
+        
+        throw error;
+    }
+};
 
 const addLocationOrSubLocation = async (flag, location_name, sub_location_name, location_id) => {
     try {
@@ -265,6 +299,8 @@ module.exports = {
     getActionTeamUserIDFromActionTeamID,
     createUser,
     deleteUser,
+    updateUser,
+    updateUserID,
     fetchAllActionTeamsWithDepartments,
     addLocationOrSubLocation,
     addIncidentTypeOrSubType,

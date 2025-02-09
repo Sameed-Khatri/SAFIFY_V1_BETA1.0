@@ -352,6 +352,53 @@ const deleteUser = async (req, res) => {
     }
 };
 
+const updateUser = async (req, res) => {
+    try {
+        if (
+            [req.body.user_id, req.body.user_name, req.body.role_name].some(
+                (value) => value == null || value === '' || value === undefined || value === '-'
+            )
+        ) {
+            return res.status(400).json({ status: 'Bad Request', message: 'Incorrect field values' });
+        };
+
+        const user = [
+            req.body.user_id,
+            req.body.user_name,
+            req.body.role_name
+        ];
+
+        const result = await adminService.updateUser(user);
+
+        return res.status(200).json({status: `User successfully updated`});
+    } catch (error) {
+        return res.status(500).json({status: 'Internal Server Error', error: error.message});
+    }
+};
+
+const updateUserID = async (req, res) => {
+    try {
+        if (
+            [req.body.user_id_old, req.body.user_id_new].some(
+                (value) => value == null || value === '' || value === undefined || value === '-'
+            )
+        ) {
+            return res.status(400).json({ status: 'Bad Request', message: 'Incorrect field values' });
+        };
+
+        const user = {
+            user_id_old: req.body.user_id_old,
+            user_id_new: req.body.user_id_new
+        };
+
+        const result = await adminService.updateUserID(user);
+        
+        return res.status(200).json({status: `User successfully updated`});
+    } catch (error) {
+        return res.status(500).json({status: 'Internal Server Error', error: error.message});
+    }
+};
+
 const generateAlert = async (req, res) => {
     try {
         const messageTitle = req.body.messageTitle;
@@ -494,6 +541,8 @@ module.exports = {
     ApproveActionReport,
     createUser,
     deleteUser,
+    updateUser,
+    updateUserID,
     fetchAllActionTeamsWithDepartments,
     generateAlert,
     addLocationOrSubLocation,
