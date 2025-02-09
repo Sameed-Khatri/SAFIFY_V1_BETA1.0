@@ -138,6 +138,15 @@ const createUser = async (user_id, user_pass, role_name, user_name, department_i
     }
 };
 
+const deleteUser = async (user) => {
+    try {
+        return await adminModel.deleteUser(user);
+    } catch (error) {
+        console.error('Error service delete user: ', error);
+        throw error;
+    }
+};
+
 const addLocationOrSubLocation = async (location_name, sub_location_name, location_id) => {
     try {
         let flag;
@@ -261,6 +270,7 @@ module.exports = {
     //updateUserPushNotification,
     getActionTeamUserIDFromActionTeamID,
     createUser,
+    deleteUser,
     fetchAllActionTeamsWithDepartments,
     addLocationOrSubLocation,
     addIncidentTypeOrSubType,

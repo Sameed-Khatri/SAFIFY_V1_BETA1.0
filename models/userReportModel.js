@@ -17,8 +17,8 @@ const fetchUserReports = async (user_id) => {
     try {
         const query = `CALL GetUserReports(?)`;
         const results = await db.query(query,[user_id]);
-        const result2 = results[0];
-        return result2[0];
+        const data = results[0];
+        return {"reports": data[0], "score": data[1]};
     } catch (error) {
         console.error('Error model fetching user reports: ', error);
         throw error;

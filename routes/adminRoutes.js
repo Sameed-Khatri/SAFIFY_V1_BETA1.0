@@ -15,6 +15,7 @@ router.delete('/dashboard/deleteUserReport/:user_report_id', authenticate.authen
 router.delete('/dashboard/deleteActionReport/:action_report_id', authenticate.authenticateToken, authenticate.authorizeRoles(role), adminController.DeleteActionReport);
 router.post('/dashboard/approvedActionReport', authenticate.authenticateToken, authenticate.authorizeRoles(role), adminController.ApproveActionReport);
 router.post('/dashboard/createUser', authenticate.authenticateToken, authenticate.authorizeRoles(role), adminController.createUser);
+router.delete('/dashboard/deleteUser', authenticate.authenticateToken, authenticate.authorizeRoles(role), adminController.deleteUser);
 router.get('/dashboard/generateUserReportPDF', authenticate.authenticateToken, authenticate.authorizeRoles(role), pdfController.generatePdfReport);
 router.get('/dashboard/fetchAllActionTeamsWithDepartments', authenticate.authenticateToken, authenticate.authorizeRoles(role), adminController.fetchAllActionTeamsWithDepartments);
 router.post('/dashboard/alertUsers', authenticate.authenticateToken, authenticate.authorizeRoles(role), adminController.generateAlert);

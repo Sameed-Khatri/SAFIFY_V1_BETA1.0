@@ -341,6 +341,17 @@ const createUser = async (req, res) => {
     }
 };
 
+const deleteUser = async (req, res) => {
+    try {
+        const user_id = req.body.user_id;
+        const user = [user_id];
+        const result = await adminService.deleteUser(user);
+        return res.status(200).json({status: 'user deleted successfully'});
+    } catch (error) {
+        return res.status(500).json({status: 'Internal Server Error', error: error.message});
+    }
+};
+
 const generateAlert = async (req, res) => {
     try {
         const messageTitle = req.body.messageTitle;
@@ -482,6 +493,7 @@ module.exports = {
     DeleteActionReport,
     ApproveActionReport,
     createUser,
+    deleteUser,
     fetchAllActionTeamsWithDepartments,
     generateAlert,
     addLocationOrSubLocation,

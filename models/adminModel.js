@@ -185,6 +185,23 @@ const createUser = async (user_id, user_pass, role_name, user_name, department_i
     }
 };
 
+const deleteUser = async (user) => {
+    try {
+        const query = `CALL deleteUser(?)`;
+        const result = await db.query(query, user);
+        console.log(result)
+        return result;
+    } catch (error) {
+        console.error('Error model delete user: ', error);
+        
+        if (error.sqlState === '45000') {
+            throw new Error(error.sqlMessage);
+        };
+
+        throw error;
+    }
+}
+
 const addLocationOrSubLocation = async (flag, location_name, sub_location_name, location_id) => {
     try {
         const query = `CALL addLocationOrSubLocation(?, ?, ?, ?)`;
@@ -247,6 +264,7 @@ module.exports = {
     //updateUserPushNotification,
     getActionTeamUserIDFromActionTeamID,
     createUser,
+    deleteUser,
     fetchAllActionTeamsWithDepartments,
     addLocationOrSubLocation,
     addIncidentTypeOrSubType,
