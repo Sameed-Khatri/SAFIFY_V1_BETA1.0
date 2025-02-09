@@ -5,19 +5,7 @@ const middleware = require('../middlewares/passwordSecurity');
 
 const fetchAllUserReports = async (req, res) => {
     try {
-        // Check cache first
-        // const cacheKey = `userReportsAll`;
-        // const cachedData = await redisOperation.getCache(cacheKey);
-        // if (cachedData) {
-        //     console.log('data found in redis cache: ');
-        //     return res.status(200).json(cachedData);
-        // }
-
         const reports = await adminService.fetchAllUserReports();
-
-        // Set cache
-        // console.log('setting data in redis cache');
-        // await redisOperation.setCache(cacheKey, reports);
 
         return res.status(200).json(reports);
     } catch (error) {
@@ -27,20 +15,8 @@ const fetchAllUserReports = async (req, res) => {
 
 const fetchAllActionReports = async (req, res) => {
     try {
-        // Check cache first
-        // const cacheKey = `actionReportsAll`;
-        // const cachedData = await redisOperation.getCache(cacheKey);
-        // if (cachedData) {
-        //     console.log('data found in redis cache: ');
-        //     return res.status(200).json(cachedData);
-        // }
-
         const reports = await adminService.fetchAllActionReports();
 
-        // Set cache
-        // console.log('setting data in redis cache');
-        // await redisOperation.setCache(cacheKey, reports);
-        
         return res.status(200).json(reports);
     } catch (error) {
         return res.status(500).json({status: 'Internal server error', error: error.message });
@@ -49,19 +25,7 @@ const fetchAllActionReports = async (req, res) => {
 
 const fetchAllDepartments = async (req, res) => {
     try {
-        // Check cache first
-        // const cacheKey = `departments`;
-        // const cachedData = await redisOperation.getCache(cacheKey);
-        // if (cachedData) {
-        //     console.log('data found in redis cache: ');
-        //     return res.status(200).json(cachedData);
-        // }
-
         const departments = await adminService.fetchAllDepartments();
-
-        // Set cache
-        // console.log('setting data in redis cache');
-        // await redisOperation.setCache(cacheKey, departments);
 
         return res.status(200).json(departments);
     } catch (error) {
@@ -71,27 +35,20 @@ const fetchAllDepartments = async (req, res) => {
 
 const fetchAllActionTeams = async (req, res) => {
     try {
-        const deptID = req.query.department_id;
-        if (!deptID) {
-            return res.status(400).json({ status: 'Bad Request', error: 'Department ID is required' });
-        }
+        if (
+            [req.query.department_id].some(
+                (value) => value == null || value.trim() === '' || value === undefined || value === '-'
+            )
+        ) {
+            return res.status(400).json({ status: 'Bad Request', message: 'Incorrect field values' });
+        };
 
-        // Check cache first
-        // const cacheKey = `allActionTeams:${deptID}`;
-        // const cachedData = await redisOperation.getCache(cacheKey);
-        // if (cachedData) {
-        //     console.log('data found in redis cache: ');
-        //     return res.status(200).json(cachedData);
-        // }
+        const deptID = req.query.department_id;
 
         const actionTeams = await adminService.fetchAllActionTeams(deptID);
         if (actionTeams.length === 0) {
             return res.status(404).json({ status: 'Not Found', error: 'No action teams found for the given department' });
-        }
-
-        // Set cache
-        // console.log('setting data in redis cache');
-        // await redisOperation.setCache(cacheKey, actionTeams);
+        };
 
         return res.status(200).json(actionTeams);
     } catch (error) {
@@ -101,22 +58,10 @@ const fetchAllActionTeams = async (req, res) => {
 
 const fetchAllActionTeamsWithDepartments = async (req, res) => {
     try {
-        // Check cache first
-        // const cacheKey = `allActionTeamsWithDepartments:`;
-        // const cachedData = await redisOperation.getCache(cacheKey);
-        // if (cachedData) {
-        //     console.log('data found in redis cache: ');
-        //     return res.status(200).json(cachedData);
-        // }
-
         const actionTeams = await adminService.fetchAllActionTeamsWithDepartments();
         if (actionTeams.length === 0) {
             return res.status(404).json({ status: 'Not Found', error: 'No data found' });
-        }
-
-        // Set cache
-        // console.log('setting data in redis cache');
-        // await redisOperation.setCache(cacheKey, actionTeams);
+        };
 
         return res.status(200).json(actionTeams);
     } catch (error) {
@@ -126,6 +71,14 @@ const fetchAllActionTeamsWithDepartments = async (req, res) => {
 
 const InsertAssignTask = async (req, res) => {
     try {
+        if (
+            [req.body.user_report_id, req.body.user_id, req.body.action_team_id, req.body.incident_criticality_id].some(
+                (value) => value == null || value.trim() === '' || value === undefined || value === '-'
+            )
+        ) {
+            return res.status(400).json({ status: 'Bad Request', message: 'Incorrect field values' });
+        };
+
         const user_report_id = req.body.user_report_id;
         const user_id = req.body.user_id;
         const action_team_id = req.body.action_team_id;
@@ -136,10 +89,6 @@ const InsertAssignTask = async (req, res) => {
         const messageBody1 = `New incident report (report number: ${user_report_id}) has been assigned.`;
         const messageTitle2 = 'Report Assigned To Team';
         const messageBody2 = `Your incident report (report number: ${user_report_id}) has been assigned. Thank you for making the work place safer!`;
-        
-        if (!user_report_id || !user_id || !incident_criticality_id || !action_team_id) {
-            return res.status(400).json({ status: 'Bad Request', error: 'params incomplete' });
-        }
         
         const actionTeamUserID = await adminService.getActionTeamUserIDFromActionTeamID(action_team_id);
         console.log(actionTeamUserID);
@@ -153,16 +102,6 @@ const InsertAssignTask = async (req, res) => {
         const response2 = await helper.sendNotification(user_id,messageTitle2,messageBody2);
         console.log(response1,response2);
         console.log(actionTeamUserID);
-        
-        // set relevant cache keys to null since data is being changed
-        // const cacheKey1 = `userReports:${user_id}`;
-        // await redisOperation.delCache(cacheKey1);
-
-        // const cacheKey2 = `userReportsAll`;
-        // await redisOperation.delCache(cacheKey2);
-
-        // const cacheKey3 = `assignedTasksActionTeam:${actionTeamUserID}`;
-        // await redisOperation.delCache(cacheKey3);
 
         return res.status(200).json({status: 'inserted in assigned task with updating criticality in user report'});
     } catch (error) {
@@ -172,16 +111,27 @@ const InsertAssignTask = async (req, res) => {
 
 const DeleteUserReport = async (req, res) => {
     try {
+        if (
+            [req.params.user_report_id].some(
+                (value) => value == null || value.trim() === '' || value === undefined || value === '-'
+            )
+        ) {
+            return res.status(400).json({ status: 'Bad Request', message: 'Incorrect field values' });
+        };
+
         const user_report_id = req.params.user_report_id;
         const messageTitle = 'Report Rejected';
         const messageBody = `Your Report (report number: ${user_report_id}) was rejected.`;
         console.log('user_report_id', user_report_id);
+
         const userIDArray = await adminService.getUseridFromUserReportid(user_report_id);
         const userID = userIDArray[0][0].userID;
+
         if(!userID) {
             return res.status(404).json({ status: 'User ID Not Found' });
         };
         console.log('result user id:',userID);
+
         const result = await adminService.DeleteUserReport(user_report_id);
         if(result < 1) {
             return res.status(404).json({ status: 'No user report found with the given ID' });
@@ -201,13 +151,6 @@ const DeleteUserReport = async (req, res) => {
         const response = await helper.sendNotification(userID,messageTitle,messageBody);
         console.log(response);
         
-        // set relevant cache keys to null since data is being changed
-        // const cacheKey1 = `userReports:${userID}`;
-        // await redisOperation.delCache(cacheKey1);
- 
-        // const cacheKey2 = `userReportsAll`;
-        // await redisOperation.delCache(cacheKey2);
-        
         return res.status(200).json({status: 'deleted user report'});
     } catch (error) {
         return res.status(500).json({status: 'Internal Server Error', error: error.message});
@@ -216,21 +159,33 @@ const DeleteUserReport = async (req, res) => {
 
 const DeleteActionReport = async (req, res) => {
     try {
+        if (
+            [req.params.action_report_id].some(
+                (value) => value == null || value.trim() === '' || value === undefined || value === '-'
+            )
+        ) {
+            return res.status(400).json({ status: 'Bad Request', message: 'Incorrect field values' });
+        };
+
         const action_report_id = req.params.action_report_id;
         const messageTitle = 'Report Rejected';
         const messageBody = `Your Report (report number: ${action_report_id}) was rejected.`;
         console.log('action_report_id: ', action_report_id);
+
         const userIDArray = await adminService.getUseridFromActionReportid(action_report_id);
         const output = userIDArray[0][0].userID;
         console.log('useridarray: ',userIDArray);
         console.log('output: ',output);
+
         const [userID, userReportUserID] = output.split(',');
         console.log('userID:', userID);
         console.log('userReportUserID:', userReportUserID);
+
         if(!userID) {
             return res.status(404).json({ status: 'User ID Not Found' });
         };
         console.log('result user id:',userID);
+
         const result = await adminService.DeleteActionReport(action_report_id);
         if(result < 1) {
             return res.status(404).json({ status: 'No action report found with the given ID' });
@@ -250,13 +205,6 @@ const DeleteActionReport = async (req, res) => {
         const response = await helper.sendNotification(userID,messageTitle,messageBody);
         console.log(response);
 
-        // set relevant cache keys to null since data is being changed
-        // const cacheKey1 = `actionReportsAll`;
-        // await redisOperation.delCache(cacheKey1);
-
-        // const cacheKey2 = `assignedTasksActionTeam:${userID}`;
-        // await redisOperation.delCache(cacheKey2);
-
         return res.status(200).json({status: 'deleted action report'});
     } catch (error) {
         console.log(error);
@@ -266,8 +214,17 @@ const DeleteActionReport = async (req, res) => {
 
 const ApproveActionReport = async (req, res) => {
     try {
+        if (
+            [req.body.user_report_id, req.body.action_report_id].some(
+                (value) => value == null || value.trim() === '' || value === undefined || value === '-'
+            )
+        ) {
+            return res.status(400).json({ status: 'Bad Request', message: 'Incorrect field values' });
+        };
+
         const user_report_id=req.body.user_report_id;
         const action_report_id=req.body.action_report_id;
+
         const messageTitle1 = 'Report Approved';
         const messageBody1 = `Your Report (report number: ${action_report_id}) was approved.`;
         const messageTitle2 = 'Report Resolved';
@@ -298,19 +255,6 @@ const ApproveActionReport = async (req, res) => {
         const response2 = await helper.sendNotification(userID,messageTitle2,messageBody2);
         console.log(response1,response2);
 
-        // set relevant cache keys to null since data is being changed
-        // const cacheKey1 = `userReports:${userID}`;
-        // await redisOperation.delCache(cacheKey1);
- 
-        // const cacheKey2 = `userReportsAll`;
-        // await redisOperation.delCache(cacheKey2);
-
-        // const cacheKey3 = `actionReportsAll`;
-        // await redisOperation.delCache(cacheKey3);
-
-        // const cacheKey4 = `assignedTasksActionTeam:${actionTeamUserID}`;
-        // await redisOperation.delCache(cacheKey4);
-
         return res.status(200).json({status: 'action report approved'});
     } catch (error) {
         console.log(error.message);
@@ -320,11 +264,24 @@ const ApproveActionReport = async (req, res) => {
 
 const createUser = async (req, res) => {
     try {
+        if (
+            [req.body.user_id, req.body.role_name, req.body.user_name].some(
+                (value) => value == null || value.trim() === '' || value === undefined || value === '-'
+            )
+        ) {
+            return res.status(400).json({ status: 'Bad Request', message: 'Incorrect field values' });
+        };
+        
+        let default_password = '123';
         const user_id = req.body.user_id;
-        const unhashedPassword = req.body.user_pass;
         const role_name = req.body.role_name;
         const user_name = req.body.user_name;
         let department_id = null;
+
+        if (req.body.user_pass && req.body.user_pass.trim() !== '' && req.body.user_pass !== '-') {
+            default_password = req.body.user_pass;
+        };
+
         if (role_name === 'action_team') {
             if (req.body.department_id) {
                 department_id = req.body.department_id;
@@ -332,9 +289,11 @@ const createUser = async (req, res) => {
                 department_id = 'D1';
             };
         };
-        const hashedPassword = await middleware.hashPassword(unhashedPassword);
+
+        const hashedPassword = await middleware.hashPassword(default_password);
         const result = await adminService.createUser(user_id, hashedPassword, role_name, user_name, department_id);
         console.log(result);
+
         return res.status(200).json({status: 'user created successfully'});
     } catch (error) {
         return res.status(500).json({status: 'Internal Server Error', error: error.message});
@@ -343,9 +302,16 @@ const createUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     try {
-        const user_id = req.body.user_id;
-        const user = [user_id];
-        const result = await adminService.deleteUser(user);
+        if (
+            [req.body.user_id].some(
+                (value) => value == null || value.trim() === '' || value === undefined || value === '-'
+            )
+        ) {
+            return res.status(400).json({ status: 'Bad Request', message: 'Incorrect field values' });
+        };
+
+        await adminService.deleteUser([req.body.user_id]);
+
         return res.status(200).json({status: 'user deleted successfully'});
     } catch (error) {
         return res.status(500).json({status: 'Internal Server Error', error: error.message});
@@ -356,7 +322,7 @@ const updateUser = async (req, res) => {
     try {
         if (
             [req.body.user_id, req.body.user_name, req.body.role_name].some(
-                (value) => value == null || value === '' || value === undefined || value === '-'
+                (value) => value == null || value.trim() === '' || value === undefined || value === '-'
             )
         ) {
             return res.status(400).json({ status: 'Bad Request', message: 'Incorrect field values' });
@@ -368,7 +334,7 @@ const updateUser = async (req, res) => {
             req.body.role_name
         ];
 
-        const result = await adminService.updateUser(user);
+        await adminService.updateUser(user);
 
         return res.status(200).json({status: `User successfully updated`});
     } catch (error) {
@@ -380,7 +346,7 @@ const updateUserID = async (req, res) => {
     try {
         if (
             [req.body.user_id_old, req.body.user_id_new].some(
-                (value) => value == null || value === '' || value === undefined || value === '-'
+                (value) => value == null || value.trim() === '' || value === undefined || value === '-'
             )
         ) {
             return res.status(400).json({ status: 'Bad Request', message: 'Incorrect field values' });
@@ -391,7 +357,7 @@ const updateUserID = async (req, res) => {
             user_id_new: req.body.user_id_new
         };
 
-        const result = await adminService.updateUserID(user);
+        await adminService.updateUserID(user);
         
         return res.status(200).json({status: `User successfully updated`});
     } catch (error) {
@@ -401,6 +367,14 @@ const updateUserID = async (req, res) => {
 
 const generateAlert = async (req, res) => {
     try {
+        if (
+            [req.body.messageTitle, req.body.messageBody].some(
+                (value) => value == null || value.trim() === '' || value === undefined || value === '-'
+            )
+        ) {
+            return res.status(400).json({ status: 'Bad Request', message: 'Incorrect field values' });
+        };
+
         const messageTitle = req.body.messageTitle;
         const messageBody = req.body.messageBody;
         const flagUserID = 'ALL';
@@ -438,11 +412,6 @@ const addLocationOrSubLocation = async (req, res) => {
         console.log(response);
 
         await helper.sendNotification(flagUserID, messageTitle, messageBody, true);
-
-        
-        // const cacheKey = `LocationsAndSubLocations:`;
-        // await redisOperation.delCache(cacheKey);
-        // console.log(`deleting cache: ${cacheKey}`);
         
         return res.status(200).json({status: 'New Location / Sub Location Added Successfully'});
     } catch (error) {
@@ -475,9 +444,6 @@ const addIncidentTypeOrSubType = async (req, res) => {
 
         await helper.sendNotification(flagUserID, messageTitle, messageBody, true);
         
-        // const cacheKey = `IncidetTypesAndIncidentSubTypes:`;
-        // await redisOperation.delCache(cacheKey);
-        
         return res.status(200).json({status: 'New Incident Type / Sub Type Added Successfully'});
     } catch (error) {
         return res.status(500).json({status: 'Internal Server Error', error: error.message});
@@ -488,19 +454,7 @@ const addIncidentTypeOrSubType = async (req, res) => {
 // made these generic
 const getLocationsAndSubLocations = async (req, res) => {
     try {
-        // Check cache first
-        // const cacheKey = `LocationsAndSubLocations:`;
-        // const cachedData = await redisOperation.getCache(cacheKey);
-        // if (cachedData) {
-        //     console.log('data found in redis cache: ');
-        //     return res.status(200).json(cachedData);
-        // }
-
         const result = await adminService.getLocationsAndSubLocations();
-
-        // Set cache
-        // console.log('setting data in redis cache');
-        // await redisOperation.setCache(cacheKey, result);
 
         return res.status(200).json(result);
     } catch (error) {
@@ -510,19 +464,7 @@ const getLocationsAndSubLocations = async (req, res) => {
 
 const getIncidetTypesAndIncidentSubTypes = async (req, res) => {
     try {
-        // Check cache first
-        // const cacheKey = `IncidetTypesAndIncidentSubTypes:`;
-        // const cachedData = await redisOperation.getCache(cacheKey);
-        // if (cachedData) {
-        //     console.log('data found in redis cache: ');
-        //     return res.status(200).json(cachedData);
-        // }
-
         const result = await adminService.getIncidetTypesAndIncidentSubTypes();
-        
-        // Set cache
-        // console.log('setting data in redis cache');
-        // await redisOperation.setCache(cacheKey, result);
         
         return res.status(200).json(result);
     } catch (error) {

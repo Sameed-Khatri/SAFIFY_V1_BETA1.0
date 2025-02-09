@@ -6,7 +6,7 @@ const notify = require('../Helper/generateNotifications');
 
 const checkCredentials = async (user_id,user_pass,device_token) => {
     try {
-        const user = await loginModel.checkCredentials(user_id,user_pass);
+        const user = await loginModel.checkCredentials(user_id);
         if(!user[0]) {
             throw new Error('Authentication failed');
         }

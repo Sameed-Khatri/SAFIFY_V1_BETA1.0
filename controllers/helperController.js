@@ -43,19 +43,7 @@ const sendDummyNotification = async (req, res) => {
 
 const getLocationsAndSubLocations = async (req, res) => {
     try {
-        // Check cache first
-        // const cacheKey = `LocationsAndSubLocations:`;
-        // const cachedData = await redisOperation.getCache(cacheKey);
-        // if (cachedData) {
-        //     console.log('data found in redis cache: ');
-        //     return res.status(200).json(cachedData);
-        // }
-
         const result = await helperService.getLocationsAndSubLocations();
-
-        // Set cache
-        // console.log('setting data in redis cache');
-        // await redisOperation.setCache(cacheKey, result);
 
         return res.status(200).json(result);
     } catch (error) {
@@ -65,19 +53,7 @@ const getLocationsAndSubLocations = async (req, res) => {
 
 const getIncidetTypesAndIncidentSubTypes = async (req, res) => {
     try {
-        // Check cache first
-        // const cacheKey = `IncidetTypesAndIncidentSubTypes:`;
-        // const cachedData = await redisOperation.getCache(cacheKey);
-        // if (cachedData) {
-        //     console.log('data found in redis cache: ');
-        //     return res.status(200).json(cachedData);
-        // }
-
         const result = await helperService.getIncidetTypesAndIncidentSubTypes();
-        
-        // Set cache
-        // console.log('setting data in redis cache');
-        // await redisOperation.setCache(cacheKey, result);
         
         return res.status(200).json(result);
     } catch (error) {
