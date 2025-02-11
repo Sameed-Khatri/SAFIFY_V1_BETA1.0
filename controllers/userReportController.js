@@ -63,6 +63,24 @@ const fetchUserReports = async (req, res) => {
     }
 };
 
+const fetchUserScore = async (req, res) => {
+    try {
+        if (
+            [req.params.userid].some(
+                (value) => value == null || value.trim() === '' || value === undefined || value === '-'
+            )
+        ) {
+            return res.status(400).json({ status: 'Bad Request', message: 'Incorrect field values' });
+        };
+
+        const reports = await userReportService.fetchUserScore([req.params.userid]);
+
+        return res.status(200).json(reports);
+    } catch (error) {
+        return res.status(500).json({ status: 'Internal server error', error: error.message });
+    }
+};
+
 const fetchSubLocations = async (req, res) => {
     try {
         if (
@@ -147,6 +165,7 @@ const getIncidetTypesAndIncidentSubTypes = async (req, res) => {
 module.exports = {
     makeUserReport,
     fetchUserReports,
+    fetchUserScore,
     fetchSubLocations,
     fetchLocations,
     fetchIncidentTypes,

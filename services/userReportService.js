@@ -37,6 +37,15 @@ const fetchUserReports = async (user_id) => {
     }
 };
 
+const fetchUserScore = async (user) => {
+    try {
+        return await userReportModel.fetchUserScore(user);
+    } catch (error) {
+        console.error('Error service fetching user score: ', error);
+        throw error;
+    }
+};
+
 const fetchSubLocations = async (location_id) => {
     try {
         return await userReportModel.fetchSubLocations(location_id);
@@ -160,6 +169,7 @@ const getIncidetTypesAndIncidentSubTypes = async () => {
 module.exports = {
     makeUserReport,
     fetchUserReports,
+    fetchUserScore,
     fetchSubLocations,
     fetchLocations,
     fetchIncidentTypes,

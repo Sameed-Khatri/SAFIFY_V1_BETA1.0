@@ -11,6 +11,7 @@ const role = 'user';
 
 router.post('/dashboard/:userid/MakeReport',upload, authenticate.authenticateToken, authenticate.authorizeRoles(role), userReportController.makeUserReport);
 router.get('/dashboard/:userid/reports', authenticate.authenticateToken, authenticate.authorizeRoles(role), userReportController.fetchUserReports);
+router.get('/dashboard/:userid/score', authenticate.authenticateToken, authenticate.authorizeRoles(role), userReportController.fetchUserScore);
 router.get('/dashboard/fetchsublocations', authenticate.authenticateToken, authenticate.authorizeRoles(role), userReportController.fetchSubLocations);
 router.get('/dashboard/fetchlocations', authenticate.authenticateToken, authenticate.authorizeRoles(role), userReportController.fetchLocations);
 router.get('/dashboard/fetchincidentType', authenticate.authenticateToken, authenticate.authorizeRoles(role), userReportController.fetchIncidentTypes);

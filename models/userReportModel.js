@@ -18,9 +18,20 @@ const fetchUserReports = async (user_id) => {
         const query = `CALL GetUserReports(?)`;
         const results = await db.query(query,[user_id]);
         const data = results[0];
-        return {"reports": data[0], "score": data[1]};
+        return data[0];
     } catch (error) {
         console.error('Error model fetching user reports: ', error);
+        throw error;
+    }
+};
+
+const fetchUserScore = async (user) => {
+    try {
+        const query = `CALL getScore(?)`;
+        const result = await db.query(query, user);
+        return result[0][0];
+    } catch (error) {
+        console.error('Error model fetching user score: ', error);
         throw error;
     }
 };
@@ -125,6 +136,7 @@ const getIncidetTypesAndIncidentSubTypes = async () => {
 module.exports = {
     insertUserReport,
     fetchUserReports,
+    fetchUserScore,
     fetchSubLocations,
     fetchLocations,
     fetchIncidentTypes,
